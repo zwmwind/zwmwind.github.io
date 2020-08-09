@@ -3,13 +3,13 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
-subtitle: ''
-description: ''
+title: ZWM's Blog
+subtitle: 'Record and Thinking'
+description: 'This is my personal blog!'
 keywords:
-author: John Doe
-language: en
-timezone: ''
+author: Zhang Weiming
+language: zh-CN
+timezone: 'Asia/Shanghai'
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
@@ -41,7 +41,7 @@ external_link:
   exclude: ''
 filename_case: 0
 render_drafts: false
-post_asset_folder: false
+post_asset_folder: true
 relative_link: false
 future: true
 highlight:
@@ -98,7 +98,7 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: landscape
+theme: next
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
@@ -106,3 +106,18 @@ deploy:
   type: git
   repo: https://github.com/zwmwind/zwmwind.github.io.git
   branch: master
+
+# Count
+symbols_count_time:
+  symbols: true # 文章字数
+  time: true # 阅读时长
+  total_symbols: true # 所有文章总字数
+  total_time: true # 所有文章阅读中时长
+
+# Search
+search:
+  path: search.xml
+  field: post
+  format: html
+  limit: 10000
+  
