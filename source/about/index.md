@@ -21,7 +21,7 @@ date: 2020-08-09 23:34:08
 
 - August 9, 2020: 博客建站
 
-## 3联系方式
+## 联系方式
 
 - Email: [zhangweiming1995@qq.com](mailto:zhangweiming1995@qq.com)
 
