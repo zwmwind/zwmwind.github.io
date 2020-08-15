@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>ZWM&#39;s Blog</title>
+  
+  <subtitle>Record and Thinking</subtitle>
+  <link href="http://yoursite.com/atom.xml" rel="self"/>
+  
+  <link href="http://yoursite.com/"/>
+  <updated>2020-08-15T17:30:12.249Z</updated>
+  <id>http://yoursite.com/</id>
+  
+  <author>
+    <name>Zhang Weiming</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Hello-World</title>
+    <link href="http://yoursite.com/2020/08/10/hello-world/"/>
+    <id>http://yoursite.com/2020/08/10/hello-world/</id>
+    <published>2020-08-09T17:23:17.000Z</published>
+    <updated>2020-08-15T17:30:12.249Z</updated>
+    
+    <content type="html"><![CDATA[ <img src="/2020/08/10/hello-world/bulb.gif" class="" title="bulb">]]></content>
+    
+    
+      
+      
+    <summary type="html"> &lt;img src=&quot;/2020/08/10/hello-world/bulb.gif&quot; class=&quot;&quot; title=&quot;bulb&quot;&gt;
+
+</summary>
+      
+    
+    
+    
+    <category term="unCategories" scheme="http://yoursite.com/categories/unCategories/"/>
+    
+    
+    <category term="helloworld" scheme="http://yoursite.com/tags/helloworld/"/>
+    
+    <category term="test" scheme="http://yoursite.com/tags/test/"/>
+    
+  </entry>
+  
+</feed>
