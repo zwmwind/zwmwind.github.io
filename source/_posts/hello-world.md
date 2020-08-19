@@ -7,6 +7,5 @@ tags:
 categories:
 - unCategories
 ---
-
- {% asset_img bulb.gif bulb %}
+![bulb](Hello-World/bulb.gif)
 
