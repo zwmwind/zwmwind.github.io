@@ -1,5 +1,6 @@
 ---
 title: Notes-Book-Analysis-Javaweb-ChapterTwo
+date: 2020-08-20 01:12:47
 tags:
 - 笔记
 - 书籍
@@ -33,4 +34,25 @@ categories:
 
 &emsp;&emsp;基于字节的I/O操作接口输入和输出分别是<font color=red>InputStream</font>和<font color=teal>OutputStream</font>，InputStream的类层次结构如下图所示。
 
-![InputStreaClassHierarchy](Notes-Book-Analysis-Javaweb-ChapterTwo/InputStreaClassHierarchy.png)
+![InputStreaClassHierarchy](Notes-Book-Analysis-Javaweb-ChapterTwo/InputStreamClassHierarchy.png)
+
+&emsp;&emsp;输入流根据<font color=red>数据类型</font>和<font color=teal>操作方式</font>又被划分为若干个子类，每个子类分别处理不同的操作类型。
+
+&emsp;&emsp;输出流OutputStream的层次结构与输入流InputStream类似，如下图所示。
+
+![OutputStreaClassHierarchy](Notes-Book-Analysis-Javaweb-ChapterTwo/OutputStreamClassHierarchy.jpg)
+
+&emsp;&emsp;有两点值得注意：
+
+- <font color=red>操作数据的方式是可以组合使用的</font>
+
+```java
+OutputStream out = new BufferedOutputStream(new ObjectOutputStream(new FileOutputStream("filename")));
+```
+
+- <font color=teal>必须要指定流最终写到什么地方，要么写到磁盘，要么是写到网络中</font>
+
+&emsp;&emsp;写网络其实也是写文件的一种，只不过写网路还有一步处理，让底层操作系统将数据传送到其他地方而非本地。
+
+### 基于字符的I/O操作接口
+

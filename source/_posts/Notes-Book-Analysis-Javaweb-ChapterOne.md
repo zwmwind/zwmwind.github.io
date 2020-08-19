@@ -27,7 +27,7 @@ categories:
 
 &emsp;&emsp;通常情况下，<font color=teal>一次请求就完成了一次数据交互，通常也对应一个业务逻辑，然后这次通信连接就断开了</font>。采用这种方式是为了能够同时服务更多的用户。
 
-&emsp;&emsp;当一个用户在浏览器中输入www.github.com这个URL时，将发生很多操作。
+&emsp;&emsp;当一个用户在浏览器中输入一个URL时，如*www.github.com*，将发生很多操作。
 
 - 首先，DNS会把这个域名解析成对应的IP地址
 - 然后，根据这个IP地址在互联网上找到对应的服务器
@@ -65,7 +65,7 @@ categories:
   | Accept-Charset  |                  用于指定客户端接收的字符集                  |
   | Accept-Encoding |   用于指定可接受的内容编码：如Accept-Econding:gzip.deflate   |
   | Accept-Language |                           用于指定                           |
-  |      Host       | 用于指定被请求资源的Internet主机号和端口号，如Host-www.github.com |
+  |      Host       | 用于指定被请求资源的Internet主机号和端口号，如Host: *www.github.com* |
   |   User-Agent    |       客户端将它的操作系统、浏览器和其他属性告负服务器       |
   |   Connection    |          当前连接是否保持，如Connetcion:Keep-Alive           |
 
