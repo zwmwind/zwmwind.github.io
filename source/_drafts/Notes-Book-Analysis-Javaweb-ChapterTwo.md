@@ -1,18 +1,22 @@
 ---
-title: 读书笔记-深入分析Java Web技术内幕-第二章
+title: Notes-Book-Analysis-Javaweb-ChapterTwo
 tags:
 - 笔记
 - 书籍
 - 读书笔记
-- categories:
+categories:
 - 深入分析JavaWeb技术内幕读书笔记
 ---
 
 # 第二章	深入分析Java I/O的工作机制
 
+***
+
 &emsp;&emsp;I/O问题是当今Web应用中所面临的主要问题。
 
 ## Java的I/O类库的基本架构
+
+<!--more-->
 
 &emsp;&emsp;I/O问题是任何编程语言都无法回避的问题。
 
@@ -30,4 +34,3 @@ tags:
 &emsp;&emsp;基于字节的I/O操作接口输入和输出分别是<font color=red>InputStream</font>和<font color=teal>OutputStream</font>，InputStream的类层次结构如下图所示。
 
 ![InputStreaClassHierarchy](Notes-Book-Analysis-Javaweb-ChapterTwo/InputStreaClassHierarchy.png)
-
