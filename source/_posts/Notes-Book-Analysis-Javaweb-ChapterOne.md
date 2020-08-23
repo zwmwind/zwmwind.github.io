@@ -21,6 +21,8 @@ categories:
 
 - 服务端基于统一的HTTP（协议）
 
+![B-SArchitecture.jpeg](Notes-Book-Analysis-Javaweb-ChapterOne/B-SArchitecture.jpeg)
+
 ## B/S架构概述
 
 &emsp;&emsp;B/S网络架构从前端到后端都得到了简化，都基于统一的应用层协议HTTP来交互数据，这与大多数传统的C/S互联网应用采用的长连接的交互模式不同，HTTP采用无状态的短连接的通信方式。
