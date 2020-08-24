@@ -66,7 +66,7 @@ categories:
   | :-------------: | :----------------------------------------------------------: |
   | Accept-Charset  |                  用于指定客户端接收的字符集                  |
   | Accept-Encoding |   用于指定可接受的内容编码：如Accept-Econding:gzip.deflate   |
-  | Accept-Language |                           用于指定                           |
+  | Accept-Language |        用于指定一种自然语言，如Accept-Language: zh-cn        |
   |      Host       | 用于指定被请求资源的Internet主机号和端口号，如Host: *www.github.com* |
   |   User-Agent    |       客户端将它的操作系统、浏览器和其他属性告负服务器       |
   |   Connection    |          当前连接是否保持，如Connetcion:Keep-Alive           |
@@ -105,7 +105,7 @@ categories:
 
 &emsp;&emsp;对浏览器使用刷新之后，会请求服务端返回新的数据，最重要的是会在<font color=red>请求头</font>中增加两个请求项，<font color = teal>Pargma:no-cache</font>和<font color=red>Cache-Control:no-cache</font>。
 
-1. Cache-Control/Pragma
+1. Cache-Control/Pragma（请求头）
 
 - 这个HTTP Head字段用于指定所有缓存机制在整个请求/响应链中必须服从的指令，而no-cache顾名思义。
 
@@ -123,13 +123,13 @@ categories:
   - Cache-Control请求字段被各个浏览器支持得较好，优先级较高。
   - Pragma字段的作用和Cache-Control类似
 
-2. Expires
+2. Expires（请求头）
 
 &emsp;&emsp;Expires通常的使用格式是*<font color=red>Expires: Sat, 25 Feb 2012 12:22:17 GMT</font>*，后面跟着一个日期和时间，超过这个时间后，缓存的内容将失效，也就是浏览器在发出请求之前检查这个页面的字段，看该页面是否已经过期了，过期了就重新向服务器发起请求。
 
-3. Last-Modified/Etag
+3. Last-Modified/Etag（响应头）
 
-&emsp;&emsp;Last-Modified字段一般用于表示一个服务器上的资源的最后修改时间，资源可以是静态（<font color=teal>静态内容自动加上Last-Modified字段</font>）或者动态的内容（<font color=red>如Servlet提供了一个getLastModified方法用于检查某个动态内容是否已经更新</font>），通过这个最后修改时间可以判断当前请求的资源是否是最新的。
+&emsp;&emsp;Last-Modified字段一般用于表示一个服务器上的资源的最后修改时间，资源可以是静态（<font color=teal>静态内容自动加上Last-Modified字段</font>）或者动态的内容（<font color=red>如Servlet提供了一个getLastModified方法用于检查某个动态内容是否已经更新</font>），通过这个最后修改时间可以判断当前请求的资源是否是最新的。一般服务器在<font color=yellow>响应头</font>中返回一个Last-Modified字段，告诉浏览器这个页面最后修改时间，如Last-Modified: Sat, 25 Feb 2012 12:55:04 GMT, 浏览器再次请求时会在<font color=red>请求头</font>中增加一个If-Modified-Since: Sat, 25 Feb 2012 12:55:04 GMT字段，询问当前缓存的页面是否时最新的，如果是最新的就返回<font color=teal>304</font>状态码，告诉浏览器是最新的，服务器也不会传输新的数据。
 
 &emsp;&emsp;与*Last-Modified*字段有类似功能的还有一个Etag字段，这个字段的作用是让服务器给每个页面分配一个唯一的编号，然后通过这个编号来区分当前这个页面是否是最新的。
 
