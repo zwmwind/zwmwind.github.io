@@ -29,7 +29,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://yoursite.com/2020/08/17/Notes-Book-Analysis-Javaweb-ChapterOne/B-SArchitecture.jpeg">
 <meta property="article:published_time" content="2020-08-16T16:09:04.000Z">
-<meta property="article:modified_time" content="2020-08-23T07:17:44.947Z">
+<meta property="article:modified_time" content="2020-08-24T17:29:45.529Z">
 <meta property="article:author" content="Zhang Weiming">
 <meta property="article:tag" content="笔记">
 <meta property="article:tag" content="书籍">
@@ -226,7 +226,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-08-23 15:17:44" itemprop="dateModified" datetime="2020-08-23T15:17:44+08:00">2020-08-23</time>
+                <time title="修改时间：2020-08-25 01:29:45" itemprop="dateModified" datetime="2020-08-25T01:29:45+08:00">2020-08-25</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -244,7 +244,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>5.8k</span>
+              <span>6k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -317,7 +317,7 @@
 </tr>
 <tr>
 <td align="center">Accept-Language</td>
-<td align="center">用于指定</td>
+<td align="center">用于指定一种自然语言，如Accept-Language: zh-cn</td>
 </tr>
 <tr>
 <td align="center">Host</td>
@@ -410,7 +410,7 @@
 <h3 id="浏览器缓存机制"><a href="#浏览器缓存机制" class="headerlink" title="浏览器缓存机制"></a>浏览器缓存机制</h3><p>&emsp;&emsp;浏览器缓存是一个比较复杂但又比较重要的的机制</p>
 <p>&emsp;&emsp;对浏览器使用刷新之后，会请求服务端返回新的数据，最重要的是会在<font color="red">请求头</font>中增加两个请求项，<font color="teal">Pargma:no-cache</font>和<font color="red">Cache-Control:no-cache</font>。</p>
 <ol>
-<li>Cache-Control/Pragma</li>
+<li>Cache-Control/Pragma（请求头）</li>
 </ol>
 <ul>
 <li><p>这个HTTP Head字段用于指定所有缓存机制在整个请求/响应链中必须服从的指令，而no-cache顾名思义。</p>
@@ -454,13 +454,13 @@
 </li>
 </ul>
 <ol start="2">
-<li>Expires</li>
+<li>Expires（请求头）</li>
 </ol>
 <p>&emsp;&emsp;Expires通常的使用格式是*<font color="red">Expires: Sat, 25 Feb 2012 12:22:17 GMT</font>*，后面跟着一个日期和时间，超过这个时间后，缓存的内容将失效，也就是浏览器在发出请求之前检查这个页面的字段，看该页面是否已经过期了，过期了就重新向服务器发起请求。</p>
 <ol start="3">
-<li>Last-Modified/Etag</li>
+<li>Last-Modified/Etag（响应头）</li>
 </ol>
-<p>&emsp;&emsp;Last-Modified字段一般用于表示一个服务器上的资源的最后修改时间，资源可以是静态（<font color="teal">静态内容自动加上Last-Modified字段</font>）或者动态的内容（<font color="red">如Servlet提供了一个getLastModified方法用于检查某个动态内容是否已经更新</font>），通过这个最后修改时间可以判断当前请求的资源是否是最新的。</p>
+<p>&emsp;&emsp;Last-Modified字段一般用于表示一个服务器上的资源的最后修改时间，资源可以是静态（<font color="teal">静态内容自动加上Last-Modified字段</font>）或者动态的内容（<font color="red">如Servlet提供了一个getLastModified方法用于检查某个动态内容是否已经更新</font>），通过这个最后修改时间可以判断当前请求的资源是否是最新的。一般服务器在<font color="yellow">响应头</font>中返回一个Last-Modified字段，告诉浏览器这个页面最后修改时间，如Last-Modified: Sat, 25 Feb 2012 12:55:04 GMT, 浏览器再次请求时会在<font color="red">请求头</font>中增加一个If-Modified-Since: Sat, 25 Feb 2012 12:55:04 GMT字段，询问当前缓存的页面是否时最新的，如果是最新的就返回<font color="teal">304</font>状态码，告诉浏览器是最新的，服务器也不会传输新的数据。</p>
 <p>&emsp;&emsp;与<em>Last-Modified</em>字段有类似功能的还有一个Etag字段，这个字段的作用是让服务器给每个页面分配一个唯一的编号，然后通过这个编号来区分当前这个页面是否是最新的。</p>
 <h2 id="DNS域名解析"><a href="#DNS域名解析" class="headerlink" title="DNS域名解析"></a>DNS域名解析</h2><p>&emsp;&emsp;在互联网世界中，每个资源都是通过URL来发布和请求资源的，URL中的域名需要解析成IP地址才能与远程主机建立连接，DNS解析就是进行此项工作的。</p>
 <h3 id="DNS域名解析过程"><a href="#DNS域名解析过程" class="headerlink" title="DNS域名解析过程"></a>DNS域名解析过程</h3><p>&emsp;&emsp;当一个用户在浏览器中输入<em><a target="_blank" rel="noopener" href="http://www.github.com/">www.github.com</a></em>时，DNS解析大概会进行如下步骤。</p>
@@ -514,7 +514,7 @@
 <h3 id="几种域名解析方式"><a href="#几种域名解析方式" class="headerlink" title="几种域名解析方式"></a>几种域名解析方式</h3><p>&emsp;&emsp;域名解析记录主要分为以下几种方式</p>
 <ul>
 <li>A记录，Address，用来指定域名对应的IP地址。A记录可以将多个域名解析到一个IP地址，但不能将一个域名解析到多个IP地址。</li>
-<li>MX记录，Mail Exchange，可以将某个域名下的邮件服务器只想自己的Mail Server。如taobao.com的域名的A记录IP地址是155.238.25.xxx，如果将MX记录设置为155.238.25.xxx，即<a href="mailto:&#x78;&#x78;&#120;&#64;&#116;&#x61;&#111;&#x62;&#x61;&#x6f;&#46;&#x63;&#x6f;&#109;">&#x78;&#x78;&#120;&#64;&#116;&#x61;&#111;&#x62;&#x61;&#x6f;&#46;&#x63;&#x6f;&#109;</a>的邮件路由，DNS会将邮件发送到155.238.25.xxx所在的服务器，而正常通过Web请求的话<font color="teal">仍然可以解析到A记录的IP地址</font>。</li>
+<li>MX记录，Mail Exchange，可以将某个域名下的邮件服务器只想自己的Mail Server。如taobao.com的域名的A记录IP地址是155.238.25.xxx，如果将MX记录设置为155.238.25.xxx，即<a href="mailto:&#x78;&#x78;&#120;&#64;&#116;&#x61;&#111;&#98;&#x61;&#111;&#46;&#99;&#x6f;&#109;">&#x78;&#x78;&#120;&#64;&#116;&#x61;&#111;&#98;&#x61;&#111;&#46;&#99;&#x6f;&#109;</a>的邮件路由，DNS会将邮件发送到155.238.25.xxx所在的服务器，而正常通过Web请求的话<font color="teal">仍然可以解析到A记录的IP地址</font>。</li>
 <li>CNAME记录，Canonical Name（别名解析）。其可以为一个域名设置一个或多个别名。</li>
 <li>NS记录，为某个域名指定DNS解析服务器。</li>
 <li>TXT记录，为某个主机名或域名设置说明。</li>
