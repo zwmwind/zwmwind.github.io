@@ -281,3 +281,74 @@ public class Serialize implements Serializable {
 
 &emsp;&emsp;当客户端要与服务器端通信时，客户端首先要创建一个Socket实例，操作系统将为这个Socket实例分配一个没有被使用的本地端口号，并创建一个包含本地地址、远程地址和端口号的套接字数据结构，<font color=teal>这个数据结构将一直保存在系统中直到这个连接关闭。</font>在创建Socket实例的构造函数正确返回<font color=red>之前</font>（Socket依赖于TCP/IP协议），需要进行TCP的三次握手，TCP握手协议完成后，Socket实例对象将创建完成，否则将抛出IOException错误。
 
+&emsp;&emsp;与之对应的服务端将创建一个ServerSocket实例，创建ServerSocket比较简单，只要指定的端口号没有被占用，一般实例都会创建成功。同时操作系统也会为Servert实例创建一个底层数据结构，在这个数据结构中包含指定监听的端口号和包含监听地址的通配符，通常情况下都是"<font color=red>*</font>"，即监听所有地址。之后当调用<font color=teal>accept()</font>方法时，将进入阻塞状态，等待客户端的请求。当一个新的请求到来时，将为这个连接创建一个新的套接字数据结构，该套接字数据的信息包含的地址和端口信息正是请求源地址和端口。这个新创建的数据结构将会关联到ServerSocket实例的一个未完成的连接数据结构列表中。<font color=yellow>注意，这时服务器的与之对应的Socket并没有完成创建，而要等到与客户端的3次握手完成后，这个服务端的Socket实例才会返回，并将这个Socket实例对应的数据结构从未完成列表移到已完成列表中。</font>所有与ServerSocket所关联的<font color=teal>已完成</font>列表中每个数据结构都代表一个与客户端建立的TCP连接。
+
+### 数据传输
+
+&emsp;&emsp;传输数据是建立连接的主要目的。
+
+&emsp;&emsp;当连接成功建立，服务端和客户端都会有一个Socket实例，<font color=teal>Socket实例都有一个InputStream和OutputStream，并通过这两个对象来交换数据。</font>由于网络I/O都是以字节流传输到，当创建Socket对象时，操作系统会为InputStream和OutputStream分别分配一定大小的缓存区，数据的写入和读取都是通过这个缓存区完成。写入端将数据写到OutputStream对应的SendQ中，<font color=teal>当队列填满时，数据将会被转移到另一端的InputStream对应的RecvQ队列中，如果RecvQ也满了，那么OutputStream队列将会阻塞，直到RecvQ队列的有足够的空间容纳SendQ发送的数据。</font><font color=red>特别注意: 缓存区的大小以及写入端的速度和读取端端速度非常影响这个连接的数据传输效率，由于可能会发生阻塞，所以网络I/O与磁盘I/O不同的是，数据的写入和读取还需要有一个协调的过程，如果两边同时传送数据可能会发生死锁问题。</font><?>
+
+## NIO的工作方式
+
+### BIO带来的挑战
+
+&emsp;&emsp;BIO即阻塞式IO，不管是磁盘I/O还是网络I/O，数据在写入OutputStream或者从InputStream读取时都有可能会阻塞，一旦有阻塞，线程将失去CPU的使用权，这在当前的大规模访问量和有性能要求的情况下，是不能接受的。虽然当前的网络I/O有一些解决办法，比如，每一个客户端对应一个处理线程，出现阻塞时只是一个线程阻塞而不会影响其他线程工作，还有为了减少系统线程的开销，采用<font color=teal>线程池</font>的办法来减少线程创建和回收的成本。但是，以上方法在某些场景下仍然有着无法解决的困难，如，当前一些需要大量HTTP长连接的情况，比如，Web旺旺，服务器端需要同时保持几百万的HTTP连接，但并不是每时每刻都在传输数据，在这种情况下不可能创建这么多线程来保持连接；另一种情况是，每个客户端的请求在服务端可能需要访问一些竞争资源，这些客户端在不同线程中，因此需要<font color=yellow>同步</font>，要实现这种同步操作比单线程复杂的多。因此，需要另一种I/O操作的方式。
+
+### NIO的工作机制
+
+&emsp;&emsp;NIO的相关类图，如下图所示。 
+
+![NIOClassDiagram](Notes-Book-Analysis-Javaweb-ChapterTwo/NIOClassDiagram.png)
+
+&emsp;&emsp;在上图中，有两个关键类：<font color=teal>Channel</font>和<font color=red>Selector</font>，它们时NIO中的两个核心概念。用前面的交通工具继续比喻，则，Channel要比Socket更加具体，可以把它比作某个具体的交通工具，比如汽车和高铁，可把Selecor比作一个车站的车辆运行调度系统，它将负责监控每辆车的当前运行状态，是已经出站还是在路上，也就是说Selector可以轮询每个Channel的状态。还有一个<font color=yellow>Buffer</font>类，它也比Stream更加具体，可以比作车上的座位。Channel=汽车，Buffer=汽车上的座位，是具体的概念，Stream只能代表一个座位，具体是什么座位是不确定的，也就是说上车之前并不知道其具体信息，如是否有座位，是什么车的座位，这些信息已经封装在了Socket（运输工具）中。NIO引入Channel、Buffer和Selector，是把这些信息具体化，让程序员可以控制它们。例如，当我们调用write()往SendQ中写入数据时，当一次写的数据超过SendQ长度时需要按照SendQ的长度进行分割，在这个过程中需要将用户空间数据和内核地址空间进行切换，而这个切换不是程序员可以控制的，但在Buffer中，程序员可以控制Buffer的容量、是否扩容以及如何扩容等。
+
+&emsp;&emsp;下面是一段典型的NIO代码：
+
+```java
+public void selector throws IOException {
+  ByteBuffer buffer = ByteBuffer.allocate(1024);
+  Selector selector = Selector.open();
+  ServerSocketChannel ssc = ServerSocketChannel.open();
+  ssc.configureBlocking(false); // 设置为非阻塞式
+  ssc.socket().bind(new InetSocketAddress(8080));
+  ssc.register(selector, SelectionKey.OP_ACCEPT); // 注册监听事件
+  while (true) {
+    Set selectedKeys = selector.selectedKeys(); // 取得所有key集合
+    Iterator it = selectedKeys.iterator();
+    while (it.hasNext()) {
+      SelectionKey key = (SelectionKey) it.next();
+      if ((key.readyOps() & SelectionKey.OP_ACCEPT) == SelectionKey.OP_ACCEPT) {
+        ServerSocketChannel ssChannel = (ServerSocketChannel) key.channel();
+        SocketChannel sc = ssChannel.accept(); // 接受到服务器的请求
+        sc.configureBlocking(false);
+        sc.register(selector, SelectionKey.OP_READ);
+        it.remove();
+      }else if ((key.readIps() & SelectionLey.OP_READ) == SelectionKey.OP_READ) {
+        SocketChannel sc = (SockeyChannel) key.channel();
+        while (true) {
+          buffer.clear();
+          int n = sc.read(buffer); // 读取数据
+          if (n <= 0) {
+            break;
+          }
+          buffer.flip();
+        }
+        it.remove();
+      }
+    }
+  }NIOClassDiagram.png
+}Pocessing of Socket requests base on NIO.png
+```
+
+&emsp;&emsp;上述代码：调用Selector的静态工厂创建一个选择器，创建一个服务端的Channel，绑定到一个Socket对象，并把这个通信信道注册到选择器上，把这个通信信道设置为非阻塞模式。然后就可以调用Selector的selectedKeys方法来检查已经注册在这个选择器上的所有通信信道是否有需要的事件发生，如果有某个事件发生，将会返回所有的SelectionKey，通过这个对象的Channel方法就可以取得这个通信信道对象，从而读取通信的数据，而这里读取的数据是<font color=red>Buffer</font>，这个Buffer是可以控制的缓冲器。
+
+&emsp;&emsp;在上面的这段程序中，将Server端监听连接请求的事件和处理请求的事件放在一个线程中，但是在事件应用中，通常会把它们放在两个线程中：<font color=teal>一个线程专门负责监听客户端的连接请求，以阻塞方式执行；</font><font color=red>一个专门负责处理请求，这个专门处理请求的线程会真正采用NIO的方式。</font>如Tomcat和Jetty都是使用这个处理方式。下图表示了基于NIO工作方式的Socket请求的处理过程。
+
+![NIOClassDiagram](Notes-Book-Analysis-Javaweb-ChapterTwo/Pocessing of Socket requests base on NIO.png)
+
+&emsp;&emsp;上图中的Selector可以同时监听一组通信信道（Channel）上的I/O状态，前提是这个Selector已经注册到这些通信信道中。选择器Selector可以调用select()方法检查已经注册的通信信道上I/O是否已经准备好，如果没有至少一个信道I/O有变化，那么select方法会阻塞等待或在超时时间后返回0。如果有多个信道有数据，那么会把这些数据分配到对应的数据Buffer中。<font color=teal>所以关键的地方是，有一个线程来处理所有连接的数据交互，每个连接的数据交互都不是阻塞方式，所以可以同时处理大量的连接请求。</font>
+
+### Buffer的工作方式
+
+&emsp;&emsp;
