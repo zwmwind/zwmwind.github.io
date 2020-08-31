@@ -345,10 +345,82 @@ public void selector throws IOException {
 
 &emsp;&emsp;在上面的这段程序中，将Server端监听连接请求的事件和处理请求的事件放在一个线程中，但是在事件应用中，通常会把它们放在两个线程中：<font color=teal>一个线程专门负责监听客户端的连接请求，以阻塞方式执行；</font><font color=red>一个专门负责处理请求，这个专门处理请求的线程会真正采用NIO的方式。</font>如Tomcat和Jetty都是使用这个处理方式。下图表示了基于NIO工作方式的Socket请求的处理过程。
 
-![NIOClassDiagram](Notes-Book-Analysis-Javaweb-ChapterTwo/Pocessing of Socket requests base on NIO.png)
+![PocessingOfSocketRequestsBase0OnNIO](Notes-Book-Analysis-Javaweb-ChapterTwo/PocessingOfSocketRequestsBase0OnNIO.png)
 
 &emsp;&emsp;上图中的Selector可以同时监听一组通信信道（Channel）上的I/O状态，前提是这个Selector已经注册到这些通信信道中。选择器Selector可以调用select()方法检查已经注册的通信信道上I/O是否已经准备好，如果没有至少一个信道I/O有变化，那么select方法会阻塞等待或在超时时间后返回0。如果有多个信道有数据，那么会把这些数据分配到对应的数据Buffer中。<font color=teal>所以关键的地方是，有一个线程来处理所有连接的数据交互，每个连接的数据交互都不是阻塞方式，所以可以同时处理大量的连接请求。</font>
 
 ### Buffer的工作方式
 
-&emsp;&emsp;
+&emsp;&emsp;Selector监测到通信信道I/O有数据传输时，通过select()取得SocketChannel，将数据读取或写入Buffer缓冲区。
+
+&emsp;&emsp;可以简单把Buffer理解为一组基本数据类型的元素列表，其通过几个变量来保存这个数据的当前位置状态，一般有4个索引，如下表所示。
+
+|   索引   |                           说明                            |
+| :------: | :-------------------------------------------------------: |
+| capacity |                    缓冲区数组的总长度                     |
+| position |               下一个要操作的数据元素的位置                |
+|  limit   | 缓冲区数组紫红不可操作的下一个元素的位置，limit<=capacity |
+|   mark   |        用于记录当前position的前一个位置或者默认为0        |
+
+&emsp;&emsp;在实际操作数据时，它们的关系如下图所示。
+
+![BufferIndexesRelationalGraph](Notes-Book-Analysis-Javaweb-ChapterTwo/BufferIndexesRelationalGraph.png)
+
+&emsp;&emsp;通过ByteBuffer.allocate(11)这个方法可以创建一个11个byte长度的数组缓冲区，初始状态如上图所示，其position的位置为0，capacity和limit默认都是数组长度。当写入5个字节时，其位置变化如下图所示。
+
+![PositionChangeDiagram](Notes-Book-Analysis-Javaweb-ChapterTwo/PositionChangeDiagram.png)
+
+&emsp;&emsp;这时，需要将缓冲区的5个字节数据写入Channel通信信道，所以要调用byteBuffer.flip()方法，数组的状态变化如下图所示。
+
+![StateChangeDiagram](Notes-Book-Analysis-Javaweb-ChapterTwo/StateChangeDiagram.png)
+
+&emsp;&emsp;这时底层操作系统可以将缓冲区正确读取这5个字节数据并发送。在下一次写数据之前，调用clear()方法，缓冲区的索引将回到初始状态。
+
+&emsp;&emsp;当我们调用mark()方法时，它将记录当前position的前一个位置，当我们调用reset时，position将恢复mark记录下来的值。
+
+&emsp;&emsp;<font color=teal>还有一点特别注意，</font>通过Channel获取的I/O数据首先要经过操作系统的Socket缓冲区，再将数据复制到Buffer中，这个操作系统缓冲区就是底层的TCP所关联的RecvQ或者SendQ队列，从操作系统缓冲区到用户缓冲区比较消耗性能，Buffer提供了<font color=red>另一种直接操作操作系统缓冲区到方式</font>。即ByteBuffer,allocateDirector(size)，这个方法返回到DirectByteBuffer就是与底层存储空间关联的缓冲区，它通过Native代码操作非JVM堆的内存空间。每次创建或者释放的时候都会调用一次System.gc()。<font color=yellow>注意：</font>在使用DirectByteBuffer时可能会引起JVM内存泄漏问题。DirectByteBuffer和Non-Direct Buffer（HeapByteBuffer）的对比如下表所示。
+
+|          |                  HeapByteBuffer                  |                       DirectByteBuffer                       |
+| :------: | :----------------------------------------------: | :----------------------------------------------------------: |
+| 存储位置 |                   Java Heap中                    |                         Native内存中                         |
+|   I/O    | 需要在用户地址空间和操作系统内核地址空间复制数据 |                           不需复制                           |
+| 内存管理 |          Java GC回收，创建和回收开销少           | 通过调用System.gc()释放掉Java对象引用的DirectByteBuffer内存空间，如果Java对象长时间持用引用可能会导致Native内存泄漏，创建和回收内存开销较大 |
+| 适用场景 |    并发连接数少于1000，I/O操作较少时比较适合     |         数据量比较大、声明周期比较长的情况下比较合适         |
+
+### NIO的数据访问方式
+
+&emsp;&emsp;NIO提供了比传统的文件访问方式更好的方法，其有着两个优化方法：一个是FileChannel,transferTo、FileChannel.transferFrom；另一个是FileChannel.map。
+
+- FileChannel.transferXXX
+
+&emsp;&emsp;FileChannel.transferXXX与传统的访问文件方式相比可以减少数据从内核到用户空间的复制，数据直接在内核空间中移动，在Linux中，其使用sendfile系统调用。以下是两种访问文件方式的对比图。
+
+![TraditionalDataAccess](Notes-Book-Analysis-Javaweb-ChapterTwo/TraditionalDataAccess.png)
+
+![FileChannel.transferXXXDataAccess](Notes-Book-Analysis-Javaweb-ChapterTwo/FileChannel.transferXXXDataAccess.png)
+
+- FileChannel.map
+
+&emsp;&emsp;所谓的FileChannel,map方法就是将文件按照一定大小块映射为内存区域，当程序访问这个内存区域时，将直接操作这个数据文件，这种方式省去了数据从内核空间向用户空间复制的小号，其适合对大文件的只读性操作，如大文件的MD5校验。但是这种方式是和操作系统的底层I/O实现相关的。某一实现方式的简略代码如下所示。
+
+```java
+public static void map(String[] args) {
+  int BUFFER_SIZE = 1024;
+  String filename = "test.db";
+  long fileLength = new File(filename).length();
+  int bufferCount = 1 + (int) (fileLength / BUFFER_SIZE);
+  MappedByteBuffer[] buffers = new MappedByteBuffer[bufferCount];
+  long remaining = fileLength;
+  for (int i = 0; i < bufferCount; i++) {
+    RandomAccessFile file;
+    try {
+      file = new RandomAccessFile(filename, "r");
+      buffers[i] = file.getChannel().map(FileChannel.MapMode.READ_ONLY, i * BUFFER_SIZE, (int) Math.min(remaining, BUFFER_SIZE));
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    remaining -= BUFFER_SIZE;
+  }
+}
+```
+
