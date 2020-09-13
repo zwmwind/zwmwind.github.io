@@ -424,3 +424,158 @@ public static void map(String[] args) {
 }
 ```
 
+## I/O调优
+
+### 磁盘I/O调优
+
+1. 性能检测
+
+&emsp;&emsp;应用程序通常需要访问磁盘来读取数据，而磁盘I/O非常消耗时间，要判断I/O是否是当前系统的性能瓶颈，有一些常用的指标参数。
+
+&emsp;&emsp;可以压力测试应用程序，看系统的I/O指标是否正常，例如：测试机器有4个CPU，那么理想的<font color=teal>I/O wait</font>参数应该不超过25%。在Linux系统下可以通过iostat命令查看。
+
+&emsp;&emsp;还有另一个参数， <font color=skyblue>IOPS</font>，即要查看应用程序需要的最低的IOPS是多少，磁盘的IOPS是否能达到要求。每个磁盘的IOPS通常在一个范围内，这和存储在磁盘上的数据块大小和访问方式也有关，但主要是由磁盘的转速决定的，磁盘的转速越高，磁盘的IOPS越高（机械硬盘）。
+
+&emsp;&emsp;为了提高磁盘I/O的性能，可以采用RAID的技术，即磁盘阵列。
+
+&emsp;&emsp;磁盘的读写吞吐量参数也可以通过iostat命令来获取，可以通过以下公示计算RAID的理论IOPS值。
+$$
+(磁盘数 * 每块磁盘的IOPS值) / (磁盘读的吞吐量 + RAID因子 * 磁盘写的吞吐量) = IOPS
+$$
+
+2. 提升I/O性能
+
+&emsp;&emsp;提升磁盘I/O性能的方法一般有：
+
+- 增加缓存，减少磁盘访问次数
+- 优化磁盘的管理系统，设计最优的磁盘方式策略，以及磁盘的寻址策略，这是在<font color=gold>底层操作系统</font>层面考虑的。
+- 设计合理的磁盘存储数据块，以及访问这些数据块的策略。这时在<font color=skyblue>应用层面</font>考虑的。
+- 应用合理的RAID策略提升磁盘I/O，RAID策略如下表所示。
+
+|  磁盘阵列  |                             说明                             |
+| :--------: | :----------------------------------------------------------: |
+|   RAID 0   | 数据被平均写到多个磁盘阵列中，写数据和读数据都是并行的，所以理论上磁盘的IOPS可以提高一倍。 |
+|   RAID 1   | RAID 1的主要作用是能够提高数据的安全性，它将一份数据分别复制到多个磁盘阵列中，并不能提升IOPS，但是相同的数据有多个备份，通常用于对数据安全性较高的场合中。 |
+|   RAID 5   | 这种设计方式是前两种的折中方式，它将数据平均写到所有磁盘阵列总数减一的磁盘中，往另外一个磁盘中写入这份数据的奇偶校验信息，如果其中一个磁盘损坏，可以通过其他磁盘的数据和这个数据的奇偶校验信息来恢复这份数据。 |
+| RAID 0 + 1 | 如名字一样，就是根据数据的备份情况进行分组，一份数据同时写到多个备份磁盘分组中，同时多个分组也会并行读写。 |
+
+### TCP网络参数调优
+
+&emsp;&emsp;要建立一个TCP连接，必须知道对方的IP和一个未被使用的端口，由于32位操作系统的端口号通常由两个字节表示，也就是只有2^16=65536个，所以一台主机能够同时建立连接数是有限的，还有一些端口<font color=red>0-1024</font>是受保护的，这些端口并不能被随意占用。
+
+&emsp;&emsp;在Linux系统中，可以通过查看<font color=gold>/proc/sys/net/ipv4/ip_local_port_range</font>文件来查看当前这个主机可以使用的端口范围。
+
+&emsp;&emsp;如果可以分配的端口号偏少，在遇到大量并发请求时，就会成为瓶颈，由于端口有限制导致大量请求等待建立连接。另外如果发现有大量的TIME_WAIT的话，可以设置<font color=lightblue>/proc/sys/net/ipv4/tcp_fin_timeout</font>为更小的值来进行快速释放请求。TCP调优参数如下表所示。
+
+|                          网络参数                          |                             说明                             |
+| :--------------------------------------------------------: | :----------------------------------------------------------: |
+| echo "1024 65535" > /proc/sys/net/ipv4/ip_local_port_range |                  设置向外连接可用的端口范围                  |
+|          echo 1 > /proc/sys/net/ipv4/tcp_tw_reuse          |                    设置time_wait连接重用                     |
+|         echo 1 > /proc/sys/net/ipv4/tcp_tw_recycle         |                  设置快速回收time_wait连接                   |
+|    echo 180000 > /proc/sys/net/ipv4/tcp_max_tw_buckets     |                  设置最大time_wait连接长度                   |
+|         echo 0 > /proc/sys/net/ipv4/tcp_timestamps         |  表示是否启用以一种比超时重发更精确的方法来启用对RIT的计算   |
+|       echo 1 > /proc/sys/net/ipv4/tcp_window_scaling       |            设置TCP/IP的会话的滑动窗口大小是否可变            |
+|    echo 20000 > /proc/sys/net/ipv4/tcp_max_syn_backlog     |         设置最大等待处于客户端还没有应答回来的连接数         |
+|         echo 10000 > /proc/sys/net/core/somaxconn          |         设置每一个处于监听状态的端口的监听队列的长度         |
+|     echo 10000 > /proc/sys/net/core/netdev_max_backlog     |                设置最大等待CPU处理的包的数量                 |
+|         echo 2000000 > /proc/sys/net/core/file_max         |                      设置最大打开文件数                      |
+|        echo 15 > /proc/sys/net/ipv4/tcp_fin_timeout        |                设置FIN-WAIT-2状态等待回收时间                |
+|        echo 16777216 > /proc/sys/net/core/rmem_max         |             设置最大的系统套接字数据接收缓冲大小             |
+|       echo 262144 > /proc/sys/net/core/rmem_default        |             设置默认的系统套接字数据接收缓冲大小             |
+|        echo 16777216 > /proc/sys/net/core/wmem_max         |             设置最大的系统套接字数据发送缓冲大小             |
+|       echo 262144 > /proc/sys/net/core/wmem_default        |             设置默认的系统套接字数据发送缓冲大小             |
+|  echo "4096 87380 16777216" > /proc/sys/net/ipv4/tcp_rmem  | 设置最大的TCP数据接收缓冲大小，三个值分别是最小、默认和最大值 |
+|  echo "4096 87380 16777216" > /proc/sys/net/ipv4/tcp_wmem  | 设置最大的TCP数据发送缓冲大小，三个值分别是最小、默认和最大值 |
+
+&emsp;&emsp;<font color=gold>注意，</font>以上设置是临时性的，重启系统之后会自动复原。另外，linux提供了一些工具可用于查看当前的TCP统计信息。如下所示。
+
+- cat /proc/net/netstat : 查看TCP的统计信息
+- cat /proc/net/snmp : 查看当前系统的连接情况
+- netstat -s : 查看网络的统计信息
+
+### 网络I/O优化
+
+&emsp;&emsp;网络I/O通常有如下一些基本处理原则。
+
+- <font color=teal>减少网络交互的次数</font>
+- <font color=red>减少网络传输数据量大小</font>
+- <font colo=gold>尽量减少编码</font>
+- <font color=skyblue>根据应用场景设置设计合适的交互方式</font>
+  - 同步和异步
+    - 所谓同步就是一个任务的完成需要依赖另一个任务时，只有等待被依赖的任务完成时，依赖的任务才能完成；而异步不需要等待被依赖的任务完成，只是通知被依赖的任务要完成什么工作，依赖的任务也立即执行，只要自己完成了整个任务就算完成了。
+  - 阻塞和非阻塞
+    - 阻塞和非阻塞主要是从CPU的消耗上来说的，阻塞就是CPU停下来等待另一个慢的操作完成之后，CPU才接着完成其他的工作。非阻塞就是在这个慢的操作执行时，CPU去做其他工作，等这个慢的操作完成时，CPU再接着完成后续的操作。<font color=red>注意，非阻塞可能会带来系统的线程切换增加</font>。
+  - 两种方式的组合
+    - 组合的方式有4种，分别是同步阻塞、同步非阻塞、异步阻塞、异步非阻塞。如下表所示。
+
+|  组合方式  |                           性能分析                           |
+| :--------: | :----------------------------------------------------------: |
+|  同步阻塞  | 最常用的一种用法，使用也是最简单的，但是I/O性能一般很差。CPU大部分时间都处于空闲状态 |
+| 同步非阻塞 | 提升I/O性能的常用手段，就是将I/O的阻塞改成非阻塞方式，尤其在网络是长连接同时传输数据也不是很多的情况下，提升性能非常有效。这种方式通常能提升I/O性能，但是会消耗CPU，在使用时要考虑增加的I/O性能是否能补偿CPU的消耗，也就是系统的瓶颈时在I/O上还是CPU上 |
+|  异步阻塞  | 这种方式在分布式数据库中经常用到，异步阻塞能对网络I/O提升效率尤其是分布式数据库中同时写多份相同诗句的情况 |
+| 异步非阻塞 | 这种组合的方式使用起来非常复杂，只有在一些非常复杂的分布式情况下会采用。其适用于，同时要传多份相同的数据到集群中的不同的机器，同时数据量不大却非常频繁的情况，这种网络I/O用这种方式性能达到最高。 |
+
+&emsp;&emsp;虽然异步和非阻塞能够提高I/O的性能，但是也会带来一些额外的性能成本。例如，会增加线程数量从而增加CPU的消耗，同时也会导致程序设计复杂度的上升。
+
+## 设计模式解析之适配器模式
+
+&emsp;&emsp;对适配器模式的功能很好理解，就是把一个类的接口变换为客户端所能接受的另一种接口，从而使两个接口不匹配的而无法在一起工作的两个类能够在一起工作。
+
+&emsp;&emsp;通常被用在一个项目需要引用一些开源框架来一起工作的情况下，这些框架的内部通常都有一些关于环境信息的接口，需要从外部传入，但是外部的接口不一定能匹配，这种情况下，就需要用到<font color=skyblue>适配器模式</font>。
+
+### 适配器模式的结构
+
+&emsp;&emsp;适配器模式的类结构如下图所示。
+
+![ClassStructureofAdapterPattern](Notes-Book-Analysis-Javaweb-ChapterTwo/ClassStructureofAdapterPattern.png)
+
+&emsp;&emsp;上图各角色说明如下。
+
+- Target（目标接口）：所要转换的所期待的接口
+- Adaptee（源角色）：需要适配的接口
+- Adapter（适配器）：将源接口适配成目标接口，继承源接口，实现目标接口
+
+### Java I/O中的适配器模式
+
+&emsp;&emsp;适配器的作用就是将一个接口适配到另一个接口，在Java的I/O类库中有很多这样的需要，例如将字符串数据转变成字节数据保存到文件中，将字节数据转变成数据流等。下面以InputStreamReader和OutputStreamWriter类为例介绍适配器模式。
+
+&emsp;&emsp;InputstreamReader和OutputStreamWriter类分别继承了Reader和Writer接口，但是要创建它们的对象必须在构造函数中传入一个InputStream和OutputStream的实例。InputstreamReader和OutputstreamWriter的作用也就是将InputStream和OutputStream适配到Reader和Writer。InputStreamReader的类结构如下图所示。
+
+![InputStreamReaderClassDiagram](Notes-Book-Analysis-Javaweb-ChapterTwo/InputStreamReaderClassDiagram.png)
+
+&emsp;&emsp;InputStreamReader实现了Reader接口，并且持有了InputStream的引用，这里是通过StreamDecoder类间接持有的，因为从byte到char要经过编码。
+
+&emsp;&emsp;很显然，适配器就是InputStreamReader类，源角色就是InputStream代表的实例对象，目标接口就是Reader类。OutputStreamWriter也是类似的方式。
+
+&emsp;&emsp;在I/O类库中还有很多类似的用法，如StringReader将一个String类适配到Reader接口，ByteArrayInputStream适配器将byte数组适配到InputStream流处理接口。
+
+## 设计模式解析之装饰器模式
+
+&emsp;&emsp;装饰器模式，顾名思义，就是将某个类重新装扮一下，使得它比原来更“漂亮”，或者在功能上更强大，这就是装饰器模式所要达到的目的。但是作为原来的这个类的使用者还不应该感受到装饰前与装饰后有什么不同，否则就破坏了原有类的结构类，所以装饰器模式要做到对被装饰类的使用者透明，这是对装饰器模式的一个要求。
+
+### 装饰器模式的结构
+
+&emsp;&emsp;下图是典型的装饰模式的类结构图。
+
+![ClassStructureofDecoratorPattern](Notes-Book-Analysis-Javaweb-ChapterTwo/ClassStructureofDecoratorPattern.png)
+
+&emsp;&emsp;上图中各个角色的描述如下。
+
+- Component：抽象组件角色，定义一组抽象的接口，规定这个被装饰组件都有哪些功能。
+- ConcreteComponent：实现这个抽象组件的所有功能。
+- Decorator：装饰器角色，它持有一个Component对象实例的引用，定义一个与抽象组件一致的接口。
+- ConcreteDecorator：具体的装饰器实现者，负责实现装饰器角色定义的功能。
+
+### Java I/O的装饰器模式
+
+&emsp;&emsp;前面介绍了装饰器模式的作用就是赋予被装饰的类更多的功能，在Java I/O类库中有很多不同的功能组合情况。这些不同的功能组合都是装饰器模式实现的，下面以FilterInputStream为例介绍装饰器模式的作用。
+
+&emsp;&emsp;下图是FilterInputStream的类结构图。
+
+![FilterInputStreamClassDiagram](Notes-Book-Analysis-Javaweb-ChapterTwo/FilterInputStreamClassDiagram.png)
+
+&emsp;&emsp;上图中，InputStream类就是以抽象组件存在的；而FileInputStream就是具体组件，它实现了抽象组件的所有接口；FIlterInputStream类就是装饰角色，它实现了InputStream类的所有接口，并且持有InputStream类的对象实例的引用；BuffereredInputStream是具体的装饰器实现者，它给InputStream类附加类功能，这个装饰器类的作用就是使得InputStream读取的数据保存在内存中，从而提高读取的性能，与这个装饰器有类似功能的还有LineNumberInputStream类，它的作用就是提高按行读取数据的功能和性能，它们都使InputStream类增强类功能，或者提升了性能。
+
+## 适配器模式与装饰器模式的区别
+
+&emsp;&emsp;适配器与装饰器模式都有一个别名就是包装模式（Wrapper），它们看似都是起到包装一个类或对象的作用，但是使用它们的目的很不一样。<font color=gold>适配器模式的意义是将一个接口转变成另一个接口，</font>它的目的是通过改变接口来达到重复使用的目的；<font color=skyblue>而装饰器模式不是要改变被装饰对象的接口，而是恰恰要保留原有的接口，</font>但是增强原有对象的功能，或者改变原有对象的处理方法而提升性能，<font color=teal>所以这两个模式设计的目的是不同的。</font>
