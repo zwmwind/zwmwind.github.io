@@ -93,7 +93,7 @@ try {
 
 &emsp;&emsp;FileReader类按照上图读取文件，FileReader继承了InputStreamReader，读取文件流，然后通过StreamDecoder解码成char，这里的解码字符为默认字符集。
 
-写入也是类似的过程。
+&emsp;&emsp;写入也是类似的过程。
 
 ![CharacterEncodingRelatedClassStructure](Notes-Book-Analysis-Javaweb-ChapterTwo/CharacterEncodingRelatedClassStructure.png)
 
@@ -579,3 +579,19 @@ $$
 ## 适配器模式与装饰器模式的区别
 
 &emsp;&emsp;适配器与装饰器模式都有一个别名就是包装模式（Wrapper），它们看似都是起到包装一个类或对象的作用，但是使用它们的目的很不一样。<font color=gold>适配器模式的意义是将一个接口转变成另一个接口，</font>它的目的是通过改变接口来达到重复使用的目的；<font color=skyblue>而装饰器模式不是要改变被装饰对象的接口，而是恰恰要保留原有的接口，</font>但是增强原有对象的功能，或者改变原有对象的处理方法而提升性能，<font color=teal>所以这两个模式设计的目的是不同的。</font>
+
+## 小结
+
+- Java的I/O类库的基本架构
+- 磁盘I/O工作机制
+- 网络I/O工作机制
+- NIO的工作方式
+- I/O调优
+- 设计模式之适配器模式
+- 设计模式之装饰器模式
+- 适配器模式与装饰器模式之间的区别
+
+## 参考资料
+
+- 《深入分析Java Web技术内幕》，许令波.
+
