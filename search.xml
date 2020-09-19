@@ -1,19 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Hello-World</title>
-    <url>/2020/08/10/hello-world/</url>
-    <content><![CDATA[<p><img src="/2020/08/10/hello-world/bulb.gif" alt="bulb"></p>
-]]></content>
-      <categories>
-        <category>unCategories</category>
-      </categories>
-      <tags>
-        <tag>helloworld</tag>
-        <tag>test</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>读书笔记-深入分析Java Web技术内幕-第一章</title>
     <url>/2020/08/17/Notes-Book-Analysis-Javaweb-ChapterOne/</url>
     <content><![CDATA[<h1 id="第一章-深入Web请求过程"><a href="#第一章-深入Web请求过程" class="headerlink" title="第一章    深入Web请求过程"></a>第一章    深入Web请求过程</h1><hr>
@@ -267,7 +254,7 @@
 <h3 id="几种域名解析方式"><a href="#几种域名解析方式" class="headerlink" title="几种域名解析方式"></a>几种域名解析方式</h3><p>&emsp;&emsp;域名解析记录主要分为以下几种方式</p>
 <ul>
 <li>A记录，Address，用来指定域名对应的IP地址。A记录可以将多个域名解析到一个IP地址，但不能将一个域名解析到多个IP地址。</li>
-<li>MX记录，Mail Exchange，可以将某个域名下的邮件服务器只想自己的Mail Server。如taobao.com的域名的A记录IP地址是155.238.25.xxx，如果将MX记录设置为155.238.25.xxx，即<a href="mailto:&#x78;&#x78;&#x78;&#x40;&#116;&#97;&#x6f;&#x62;&#x61;&#111;&#x2e;&#x63;&#111;&#x6d;">&#x78;&#x78;&#x78;&#x40;&#116;&#97;&#x6f;&#x62;&#x61;&#111;&#x2e;&#x63;&#111;&#x6d;</a>的邮件路由，DNS会将邮件发送到155.238.25.xxx所在的服务器，而正常通过Web请求的话<font color="teal">仍然可以解析到A记录的IP地址</font>。</li>
+<li>MX记录，Mail Exchange，可以将某个域名下的邮件服务器只想自己的Mail Server。如taobao.com的域名的A记录IP地址是155.238.25.xxx，如果将MX记录设置为155.238.25.xxx，即<a href="mailto:&#120;&#x78;&#120;&#x40;&#116;&#97;&#111;&#98;&#97;&#x6f;&#x2e;&#99;&#111;&#109;">&#120;&#x78;&#120;&#x40;&#116;&#97;&#111;&#98;&#97;&#x6f;&#x2e;&#99;&#111;&#109;</a>的邮件路由，DNS会将邮件发送到155.238.25.xxx所在的服务器，而正常通过Web请求的话<font color="teal">仍然可以解析到A记录的IP地址</font>。</li>
 <li>CNAME记录，Canonical Name（别名解析）。其可以为一个域名设置一个或多个别名。</li>
 <li>NS记录，为某个域名指定DNS解析服务器。</li>
 <li>TXT记录，为某个主机名或域名设置说明。</li>
@@ -323,6 +310,19 @@
       </tags>
   </entry>
   <entry>
+    <title>Hello-World</title>
+    <url>/2020/08/10/hello-world/</url>
+    <content><![CDATA[<p><img src="/2020/08/10/hello-world/bulb.gif" alt="bulb"></p>
+]]></content>
+      <categories>
+        <category>unCategories</category>
+      </categories>
+      <tags>
+        <tag>helloworld</tag>
+        <tag>test</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>读书笔记-深入分析Java Web技术内幕-第二章</title>
     <url>/2020/08/20/Notes-Book-Analysis-Javaweb-ChapterTwo/</url>
     <content><![CDATA[<h1 id="第二章-深入分析Java-I-O的工作机制"><a href="#第二章-深入分析Java-I-O的工作机制" class="headerlink" title="第二章    深入分析Java I/O的工作机制"></a>第二章    深入分析Java I/O的工作机制</h1><hr>
@@ -367,7 +367,7 @@
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">  StringBuffer str = <span class="keyword">new</span> StringBuffer();</span><br><span class="line">  <span class="keyword">char</span>[] buf = <span class="keyword">new</span> <span class="keyword">char</span>[<span class="number">1024</span>];</span><br><span class="line">  FileReader f = <span class="keyword">new</span> FileReader(<span class="string">&quot;file&quot;</span>);</span><br><span class="line">  <span class="keyword">while</span> (f.read(buf) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    str.append(buf);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>&emsp;&emsp;FileReader类按照上图读取文件，FileReader继承了InputStreamReader，读取文件流，然后通过StreamDecoder解码成char，这里的解码字符为默认字符集。</p>
-<p>写入也是类似的过程。</p>
+<p>&emsp;&emsp;写入也是类似的过程。</p>
 <p><img src="/2020/08/20/Notes-Book-Analysis-Javaweb-ChapterTwo/CharacterEncodingRelatedClassStructure.png" alt="CharacterEncodingRelatedClassStructure"></p>
 <p>&emsp;&emsp;通过OutputSteamWriter类完成了从字符到字节的编码过程，由StreamEncoder完成编码过程。</p>
 <h2 id="磁盘I-O工作机制"><a href="#磁盘I-O工作机制" class="headerlink" title="磁盘I/O工作机制"></a>磁盘I/O工作机制</h2><h3 id="几种访问文件的方式"><a href="#几种访问文件的方式" class="headerlink" title="几种访问文件的方式"></a>几种访问文件的方式</h3><p>&emsp;&emsp;读取和写入都会调用操作系统提供的接口，只要是系统调用就可能会存在<font color="teal">内核空间地址和用户空间地址切换的问题</font>，这是为了保护内核程序运行的安全性，但是这也存在数据可能需要从内核空间向用户空间复制的问题。</p>
@@ -801,6 +801,19 @@
 <p><img src="/2020/08/20/Notes-Book-Analysis-Javaweb-ChapterTwo/FilterInputStreamClassDiagram.png" alt="FilterInputStreamClassDiagram"></p>
 <p>&emsp;&emsp;上图中，InputStream类就是以抽象组件存在的；而FileInputStream就是具体组件，它实现了抽象组件的所有接口；FIlterInputStream类就是装饰角色，它实现了InputStream类的所有接口，并且持有InputStream类的对象实例的引用；BuffereredInputStream是具体的装饰器实现者，它给InputStream类附加类功能，这个装饰器类的作用就是使得InputStream读取的数据保存在内存中，从而提高读取的性能，与这个装饰器有类似功能的还有LineNumberInputStream类，它的作用就是提高按行读取数据的功能和性能，它们都使InputStream类增强类功能，或者提升了性能。</p>
 <h2 id="适配器模式与装饰器模式的区别"><a href="#适配器模式与装饰器模式的区别" class="headerlink" title="适配器模式与装饰器模式的区别"></a>适配器模式与装饰器模式的区别</h2><p>&emsp;&emsp;适配器与装饰器模式都有一个别名就是包装模式（Wrapper），它们看似都是起到包装一个类或对象的作用，但是使用它们的目的很不一样。<font color="gold">适配器模式的意义是将一个接口转变成另一个接口，</font>它的目的是通过改变接口来达到重复使用的目的；<font color="skyblue">而装饰器模式不是要改变被装饰对象的接口，而是恰恰要保留原有的接口，</font>但是增强原有对象的功能，或者改变原有对象的处理方法而提升性能，<font color="teal">所以这两个模式设计的目的是不同的。</font></p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><ul>
+<li>Java的I/O类库的基本架构</li>
+<li>磁盘I/O工作机制</li>
+<li>网络I/O工作机制</li>
+<li>NIO的工作方式</li>
+<li>I/O调优</li>
+<li>设计模式之适配器模式</li>
+<li>设计模式之装饰器模式</li>
+<li>适配器模式与装饰器模式之间的区别</li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li>《深入分析Java Web技术内幕》，许令波.</li>
+</ul>
 ]]></content>
       <categories>
         <category>深入分析JavaWeb技术内幕读书笔记</category>
