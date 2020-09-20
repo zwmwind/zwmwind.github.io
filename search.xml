@@ -5,6 +5,8 @@
     <url>/2020/09/20/JavaEntityClassPackageName/</url>
     <content><![CDATA[<h1 id="Java实体类包名问题"><a href="#Java实体类包名问题" class="headerlink" title="Java实体类包名问题"></a>Java实体类包名问题</h1><hr>
 <h2 id="Entity"><a href="#Entity" class="headerlink" title="Entity"></a>Entity</h2><p>&emsp;&emsp;最常用实体类，基本和数据表一一对应，一个实体一张表。</p>
+<a id="more"></a>
+
 <h2 id="BO-Business-Object"><a href="#BO-Business-Object" class="headerlink" title="BO(Business Object)"></a>BO(Business Object)</h2><p>&emsp;&emsp;代表业务对象的意思，Bo就是把业务逻辑封装为一个对象（注意是逻辑，业务逻辑），这个对象可以包括一个或多个其它的对象。通过调用Dao方法，结合Po或Vo进行业务操作。</p>
 <p>&emsp;&emsp;形象描述为一个对象的形为和动作，当然也有涉及到基它对象的一些形为和动作。比如处理一个人的业务逻辑，该人会睡觉，吃饭，工作，上班等等行为，还有可能和别人发关系的行为，处理这样的业务逻辑时，我们就可以针对BO去处理。</p>
 <p>&emsp;&emsp;再比如投保人是一个Po，被保险人是一个Po，险种信息也是一个Po等等，他们组合起来就是一张保单的Bo。</p>
@@ -300,7 +302,7 @@
 <h3 id="几种域名解析方式"><a href="#几种域名解析方式" class="headerlink" title="几种域名解析方式"></a>几种域名解析方式</h3><p>&emsp;&emsp;域名解析记录主要分为以下几种方式</p>
 <ul>
 <li>A记录，Address，用来指定域名对应的IP地址。A记录可以将多个域名解析到一个IP地址，但不能将一个域名解析到多个IP地址。</li>
-<li>MX记录，Mail Exchange，可以将某个域名下的邮件服务器只想自己的Mail Server。如taobao.com的域名的A记录IP地址是155.238.25.xxx，如果将MX记录设置为155.238.25.xxx，即<a href="mailto:&#120;&#x78;&#x78;&#x40;&#x74;&#x61;&#111;&#98;&#x61;&#111;&#46;&#x63;&#x6f;&#109;">&#120;&#x78;&#x78;&#x40;&#x74;&#x61;&#111;&#98;&#x61;&#111;&#46;&#x63;&#x6f;&#109;</a>的邮件路由，DNS会将邮件发送到155.238.25.xxx所在的服务器，而正常通过Web请求的话<font color="teal">仍然可以解析到A记录的IP地址</font>。</li>
+<li>MX记录，Mail Exchange，可以将某个域名下的邮件服务器只想自己的Mail Server。如taobao.com的域名的A记录IP地址是155.238.25.xxx，如果将MX记录设置为155.238.25.xxx，即<a href="mailto:&#x78;&#x78;&#x78;&#64;&#116;&#97;&#111;&#x62;&#x61;&#x6f;&#46;&#x63;&#x6f;&#x6d;">&#x78;&#x78;&#x78;&#64;&#116;&#97;&#111;&#x62;&#x61;&#x6f;&#46;&#x63;&#x6f;&#x6d;</a>的邮件路由，DNS会将邮件发送到155.238.25.xxx所在的服务器，而正常通过Web请求的话<font color="teal">仍然可以解析到A记录的IP地址</font>。</li>
 <li>CNAME记录，Canonical Name（别名解析）。其可以为一个域名设置一个或多个别名。</li>
 <li>NS记录，为某个域名指定DNS解析服务器。</li>
 <li>TXT记录，为某个主机名或域名设置说明。</li>
