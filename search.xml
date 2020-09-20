@@ -1,6 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Java实体类包名问题</title>
+    <url>/2020/09/20/JavaEntityClassPackageName/</url>
+    <content><![CDATA[<h1 id="Java实体类包名问题"><a href="#Java实体类包名问题" class="headerlink" title="Java实体类包名问题"></a>Java实体类包名问题</h1><hr>
+<h2 id="Entity"><a href="#Entity" class="headerlink" title="Entity"></a>Entity</h2><p>&emsp;&emsp;最常用实体类，基本和数据表一一对应，一个实体一张表。</p>
+<h2 id="BO-Business-Object"><a href="#BO-Business-Object" class="headerlink" title="BO(Business Object)"></a>BO(Business Object)</h2><p>&emsp;&emsp;代表业务对象的意思，Bo就是把业务逻辑封装为一个对象（注意是逻辑，业务逻辑），这个对象可以包括一个或多个其它的对象。通过调用Dao方法，结合Po或Vo进行业务操作。</p>
+<p>&emsp;&emsp;形象描述为一个对象的形为和动作，当然也有涉及到基它对象的一些形为和动作。比如处理一个人的业务逻辑，该人会睡觉，吃饭，工作，上班等等行为，还有可能和别人发关系的行为，处理这样的业务逻辑时，我们就可以针对BO去处理。</p>
+<p>&emsp;&emsp;再比如投保人是一个Po，被保险人是一个Po，险种信息也是一个Po等等，他们组合起来就是一张保单的Bo。</p>
+<h2 id="VO-Value-Object"><a href="#VO-Value-Object" class="headerlink" title="VO(Value Object)"></a>VO(Value Object)</h2><p>&emsp;&emsp;代表值对象的意思，通常用于业务层之间的数据传递，由new创建，由GC回收。主要体现在视图的对象，对于一个WEB页面将整个页面的属性封装成一个对象，然后用一个VO对象在控制层与视图层进行传输交换。</p>
+<h2 id="PO-Persistant-Object"><a href="#PO-Persistant-Object" class="headerlink" title="PO(Persistant Object)"></a>PO(Persistant Object)</h2><p>&emsp;&emsp;代表持久层对象的意思，对应数据库中表的字段，数据库表中的记录在java对象中的显示状态，最形象的理解就是一个PO就是数据库中的一条记录。</p>
+<p>&emsp;&emsp;其好处是可以把一条记录作为一个对象处理，可以方便的转为其它对象。Vo和Po，都是属性加上属性的get和set方法；表面看没什么不同，但代表的含义是完全不同的。</p>
+<h2 id="DTO-Data-Transfer-Object"><a href="#DTO-Data-Transfer-Object" class="headerlink" title="DTO(Data Transfer Object)"></a>DTO(Data Transfer Object)</h2><p>&emsp;&emsp;代表数据传输对象的意思。</p>
+<p>&emsp;&emsp;其是一种设计模式之间传输数据的软件应用系统，数据传输目标往往是数据访问对象从数据库中检索数据。</p>
+<p>&emsp;&emsp;数据传输对象与数据交互对象或数据访问对象之间的差异是一个以不具任何行为除了存储和检索的数据（访问和存取器）。<br>&emsp;&emsp;简而言之，就是接口之间传递的数据封装。</p>
+<p>&emsp;&emsp;表里面有十几个字段：id，name，gender（M/F)，age……</p>
+<p>&emsp;&emsp;页面需要展示三个字段：name，gender(男/女)，age</p>
+<p>&emsp;&emsp;DTO由此产生，一是能提高数据传输的速度(减少了传输字段)，二能隐藏后端表结构</p>
+<h2 id="POJO-Plian-Ordinary-Java-Object"><a href="#POJO-Plian-Ordinary-Java-Object" class="headerlink" title="POJO(Plian Ordinary Java Object)"></a>POJO(Plian Ordinary Java Object)</h2><p>&emsp;&emsp;代表简单无规则java对象</p>
+<p>&emsp;&emsp;纯的传统意义的java对象，最基本的Java Bean只有属性加上属性的get和set方法</p>
+<p>&emsp;&emsp;可以额转化为PO、DTO、VO；比如POJO在传输过程中就是DTO。</p>
+<h2 id="DAO-Data-Access-Object"><a href="#DAO-Data-Access-Object" class="headerlink" title="DAO(Data Access Object)"></a>DAO(Data Access Object)</h2><p>&emsp;&emsp;代表数据访问对象的意思，是sun的一个标准j2ee设计模式的接口之一，负责持久层的操作 。这个基本都了解，DAO和上面几个O区别最大，基本没有互相转化的可能性和必要，主要用来封装对数据的访问，注意，是对数据的访问，不是对数据库的访问。</p>
+<h2 id="各个实体类包名的联系"><a href="#各个实体类包名的联系" class="headerlink" title="各个实体类包名的联系"></a>各个实体类包名的联系</h2><p><img src="/2020/09/20/JavaEntityClassPackageName/JavaEntityClassRelationship.png" alt="JavaEntityClassRelationship"></p>
+<h2 id="Controller"><a href="#Controller" class="headerlink" title="Controller"></a>Controller</h2><p>&emsp;&emsp;代表控制层，主要是Action/Servlet等构成（Spring MVC则是通过@Controller标签使用）此层业务层与视图层打交道的中间层，负责传输VO对象和调用BO层的业务方法，负责视图层请求的数据处理后响应给视图层。</p>
+<h2 id="View"><a href="#View" class="headerlink" title="View"></a>View</h2><p>&emsp;&emsp;代表视图层的意思，主要是指由JSP、HTML等文件形成的显示层。</p>
+<h2 id="实际项目"><a href="#实际项目" class="headerlink" title="实际项目"></a>实际项目</h2><ul>
+<li>控制层(controller-action)</li>
+<li>业务层/服务层( bo-manager-service</li>
+<li>实体层(po-entity)</li>
+<li>dao(dao)</li>
+<li>视图对象(Vo)</li>
+<li>视图层(view-jsp/html)</li>
+</ul>
+<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><ul>
+<li>实际使用中，实体类包名自己分得清楚就可以了。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Java实际开发问题</category>
+      </categories>
+      <tags>
+        <tag>developing</tag>
+        <tag>Java</tag>
+        <tag>容易混淆的问题</tag>
+        <tag>实际开发问题</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>读书笔记-深入分析Java Web技术内幕-第一章</title>
     <url>/2020/08/17/Notes-Book-Analysis-Javaweb-ChapterOne/</url>
     <content><![CDATA[<h1 id="第一章-深入Web请求过程"><a href="#第一章-深入Web请求过程" class="headerlink" title="第一章    深入Web请求过程"></a>第一章    深入Web请求过程</h1><hr>
@@ -254,7 +300,7 @@
 <h3 id="几种域名解析方式"><a href="#几种域名解析方式" class="headerlink" title="几种域名解析方式"></a>几种域名解析方式</h3><p>&emsp;&emsp;域名解析记录主要分为以下几种方式</p>
 <ul>
 <li>A记录，Address，用来指定域名对应的IP地址。A记录可以将多个域名解析到一个IP地址，但不能将一个域名解析到多个IP地址。</li>
-<li>MX记录，Mail Exchange，可以将某个域名下的邮件服务器只想自己的Mail Server。如taobao.com的域名的A记录IP地址是155.238.25.xxx，如果将MX记录设置为155.238.25.xxx，即<a href="mailto:&#120;&#x78;&#120;&#x40;&#116;&#97;&#111;&#98;&#97;&#x6f;&#x2e;&#99;&#111;&#109;">&#120;&#x78;&#120;&#x40;&#116;&#97;&#111;&#98;&#97;&#x6f;&#x2e;&#99;&#111;&#109;</a>的邮件路由，DNS会将邮件发送到155.238.25.xxx所在的服务器，而正常通过Web请求的话<font color="teal">仍然可以解析到A记录的IP地址</font>。</li>
+<li>MX记录，Mail Exchange，可以将某个域名下的邮件服务器只想自己的Mail Server。如taobao.com的域名的A记录IP地址是155.238.25.xxx，如果将MX记录设置为155.238.25.xxx，即<a href="mailto:&#120;&#x78;&#x78;&#x40;&#x74;&#x61;&#111;&#98;&#x61;&#111;&#46;&#x63;&#x6f;&#109;">&#120;&#x78;&#x78;&#x40;&#x74;&#x61;&#111;&#98;&#x61;&#111;&#46;&#x63;&#x6f;&#109;</a>的邮件路由，DNS会将邮件发送到155.238.25.xxx所在的服务器，而正常通过Web请求的话<font color="teal">仍然可以解析到A记录的IP地址</font>。</li>
 <li>CNAME记录，Canonical Name（别名解析）。其可以为一个域名设置一个或多个别名。</li>
 <li>NS记录，为某个域名指定DNS解析服务器。</li>
 <li>TXT记录，为某个主机名或域名设置说明。</li>
