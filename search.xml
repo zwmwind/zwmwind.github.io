@@ -1,0 +1,956 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Java实体类包名问题</title>
+    <url>/2020/09/20/JavaEntityClassPackageName/</url>
+    <content><![CDATA[<h1 id="Java实体类包名问题"><a href="#Java实体类包名问题" class="headerlink" title="Java实体类包名问题"></a>Java实体类包名问题</h1><hr>
+<h2 id="Entity"><a href="#Entity" class="headerlink" title="Entity"></a>Entity</h2><p>&emsp;&emsp;最常用实体类，基本和数据表一一对应，一个实体一张表。</p>
+<a id="more"></a>
+
+<h2 id="BO-Business-Object"><a href="#BO-Business-Object" class="headerlink" title="BO(Business Object)"></a>BO(Business Object)</h2><p>&emsp;&emsp;代表业务对象的意思，Bo就是把业务逻辑封装为一个对象（注意是逻辑，业务逻辑），这个对象可以包括一个或多个其它的对象。通过调用Dao方法，结合Po或Vo进行业务操作。</p>
+<p>&emsp;&emsp;形象描述为一个对象的形为和动作，当然也有涉及到基它对象的一些形为和动作。比如处理一个人的业务逻辑，该人会睡觉，吃饭，工作，上班等等行为，还有可能和别人发关系的行为，处理这样的业务逻辑时，我们就可以针对BO去处理。</p>
+<p>&emsp;&emsp;再比如投保人是一个Po，被保险人是一个Po，险种信息也是一个Po等等，他们组合起来就是一张保单的Bo。</p>
+<h2 id="VO-Value-Object"><a href="#VO-Value-Object" class="headerlink" title="VO(Value Object)"></a>VO(Value Object)</h2><p>&emsp;&emsp;代表值对象的意思，通常用于业务层之间的数据传递，由new创建，由GC回收。主要体现在视图的对象，对于一个WEB页面将整个页面的属性封装成一个对象，然后用一个VO对象在控制层与视图层进行传输交换。</p>
+<h2 id="PO-Persistant-Object"><a href="#PO-Persistant-Object" class="headerlink" title="PO(Persistant Object)"></a>PO(Persistant Object)</h2><p>&emsp;&emsp;代表持久层对象的意思，对应数据库中表的字段，数据库表中的记录在java对象中的显示状态，最形象的理解就是一个PO就是数据库中的一条记录。</p>
+<p>&emsp;&emsp;其好处是可以把一条记录作为一个对象处理，可以方便的转为其它对象。Vo和Po，都是属性加上属性的get和set方法；表面看没什么不同，但代表的含义是完全不同的。</p>
+<h2 id="DTO-Data-Transfer-Object"><a href="#DTO-Data-Transfer-Object" class="headerlink" title="DTO(Data Transfer Object)"></a>DTO(Data Transfer Object)</h2><p>&emsp;&emsp;代表数据传输对象的意思。</p>
+<p>&emsp;&emsp;其是一种设计模式之间传输数据的软件应用系统，数据传输目标往往是数据访问对象从数据库中检索数据。</p>
+<p>&emsp;&emsp;数据传输对象与数据交互对象或数据访问对象之间的差异是一个以不具任何行为除了存储和检索的数据（访问和存取器）。<br>&emsp;&emsp;简而言之，就是接口之间传递的数据封装。</p>
+<p>&emsp;&emsp;表里面有十几个字段：id，name，gender（M/F)，age……</p>
+<p>&emsp;&emsp;页面需要展示三个字段：name，gender(男/女)，age</p>
+<p>&emsp;&emsp;DTO由此产生，一是能提高数据传输的速度(减少了传输字段)，二能隐藏后端表结构</p>
+<h2 id="POJO-Plian-Ordinary-Java-Object"><a href="#POJO-Plian-Ordinary-Java-Object" class="headerlink" title="POJO(Plian Ordinary Java Object)"></a>POJO(Plian Ordinary Java Object)</h2><p>&emsp;&emsp;代表简单无规则java对象</p>
+<p>&emsp;&emsp;纯的传统意义的java对象，最基本的Java Bean只有属性加上属性的get和set方法</p>
+<p>&emsp;&emsp;可以额转化为PO、DTO、VO；比如POJO在传输过程中就是DTO。</p>
+<h2 id="DAO-Data-Access-Object"><a href="#DAO-Data-Access-Object" class="headerlink" title="DAO(Data Access Object)"></a>DAO(Data Access Object)</h2><p>&emsp;&emsp;代表数据访问对象的意思，是sun的一个标准j2ee设计模式的接口之一，负责持久层的操作 。这个基本都了解，DAO和上面几个O区别最大，基本没有互相转化的可能性和必要，主要用来封装对数据的访问，注意，是对数据的访问，不是对数据库的访问。</p>
+<h2 id="各个实体类包名的联系"><a href="#各个实体类包名的联系" class="headerlink" title="各个实体类包名的联系"></a>各个实体类包名的联系</h2><p><img src="/2020/09/20/JavaEntityClassPackageName/JavaEntityClassRelationship.png" alt="JavaEntityClassRelationship"></p>
+<h2 id="Controller"><a href="#Controller" class="headerlink" title="Controller"></a>Controller</h2><p>&emsp;&emsp;代表控制层，主要是Action/Servlet等构成（Spring MVC则是通过@Controller标签使用）此层业务层与视图层打交道的中间层，负责传输VO对象和调用BO层的业务方法，负责视图层请求的数据处理后响应给视图层。</p>
+<h2 id="View"><a href="#View" class="headerlink" title="View"></a>View</h2><p>&emsp;&emsp;代表视图层的意思，主要是指由JSP、HTML等文件形成的显示层。</p>
+<h2 id="实际项目"><a href="#实际项目" class="headerlink" title="实际项目"></a>实际项目</h2><ul>
+<li>控制层(controller-action)</li>
+<li>业务层/服务层( bo-manager-service</li>
+<li>实体层(po-entity)</li>
+<li>dao(dao)</li>
+<li>视图对象(Vo)</li>
+<li>视图层(view-jsp/html)</li>
+</ul>
+<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><ul>
+<li>实际使用中，实体类包名自己分得清楚就可以了。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Java实际开发问题</category>
+      </categories>
+      <tags>
+        <tag>developing</tag>
+        <tag>Java</tag>
+        <tag>容易混淆的问题</tag>
+        <tag>实际开发问题</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>读书笔记-深入分析Java Web技术内幕-第一章</title>
+    <url>/2020/08/17/Notes-Book-Analysis-Javaweb-ChapterOne/</url>
+    <content><![CDATA[<h1 id="第一章-深入Web请求过程"><a href="#第一章-深入Web请求过程" class="headerlink" title="第一章    深入Web请求过程"></a>第一章    深入Web请求过程</h1><hr>
+<h2 id="B-S架构的好处"><a href="#B-S架构的好处" class="headerlink" title="B/S架构的好处"></a>B/S架构的好处</h2><ul>
+<li>客户端使用统一的浏览器（Browser）</li>
+</ul>
+<a id="more"></a>
+
+<ul>
+<li>服务端基于统一的HTTP（协议）</li>
+</ul>
+<p><img src="/2020/08/17/Notes-Book-Analysis-Javaweb-ChapterOne/B-SArchitecture.jpeg" alt="B-SArchitecture.jpeg"></p>
+<h2 id="B-S架构概述"><a href="#B-S架构概述" class="headerlink" title="B/S架构概述"></a>B/S架构概述</h2><p>&emsp;&emsp;B/S网络架构从前端到后端都得到了简化，都基于统一的应用层协议HTTP来交互数据，这与大多数传统的C/S互联网应用采用的长连接的交互模式不同，HTTP采用无状态的短连接的通信方式。</p>
+<p>&emsp;&emsp;通常情况下，<font color="teal">一次请求就完成了一次数据交互，通常也对应一个业务逻辑，然后这次通信连接就断开了</font>。采用这种方式是为了能够同时服务更多的用户。</p>
+<p>&emsp;&emsp;当一个用户在浏览器中输入一个URL时，如<em><a href="http://www.github.com/">www.github.com</a></em>，将发生很多操作。</p>
+<ul>
+<li>首先，DNS会把这个域名解析成对应的IP地址</li>
+<li>然后，根据这个IP地址在互联网上找到对应的服务器</li>
+<li>随后，发起一个请求给服务器</li>
+<li>最后，服务器返回默认的数据资源给访问的用户</li>
+</ul>
+<p>&emsp;&emsp;不管网络结构如何变化，始终有一些固定不变的原则。</p>
+<ul>
+<li>所有互联网上的资源都要用一个URL来表示，URL就是统一资源定位符。</li>
+<li>必须基于HTTP与服务端进行交互。</li>
+<li>数据展示必须在浏览器中进行。</li>
+</ul>
+<h2 id="如何发起一个请求"><a href="#如何发起一个请求" class="headerlink" title="如何发起一个请求"></a>如何发起一个请求</h2><p>&emsp;&emsp;发起一个请求和建议一个Socket连接类似，只不过其outputStream.write写的二进制字节数据格式要符合HTTP。</p>
+<ul>
+<li>浏览器在建立Socket连接之前，必须根据地址栏中的URL解析（DNS）出相应的的IP地址，在根据地址和端口号与远程服务器建立Socket连接。</li>
+<li>浏览器会根据这个URL组成一个get烈性的HTTP请求，通过<font color="red">outputStrem.write</font>发送到目标服务器，服务器等待<font color="teal">inputStream.read</font>返回数据。</li>
+<li>最后断开这个连接。</li>
+</ul>
+<h2 id="HTTP解析"><a href="#HTTP解析" class="headerlink" title="HTTP解析"></a>HTTP解析</h2><p>&emsp;&emsp;B/S网络架构的核心是HTTP，掌握HTTP对一个从事互联网工作的程序员来说非常重要</p>
+<p>&emsp;&emsp;要理解HTTP，最重要的就是熟悉HTTP中的HTTP Header，HTTP Header控制着互联网上成千上万的用户数据的传输。最关键的是，它控制着用户<font color="red">浏览器的渲染行为</font>和<font color="teal">服务器的执行逻辑</font>。</p>
+<p>&emsp;&emsp;例如，当服务器没有用户请求的数据时就会返回一个404状态码，告诉浏览器没有要请求的数据，通常浏览器就会展示一个该页面不存在的错误信息。</p>
+<p>&emsp;&emsp;常见的HTTP请求头和响应头分别如下所示。</p>
+<ul>
+<li><p>常见的HTTP请求头</p>
+<table>
+<thead>
+<tr>
+<th align="center">请求头</th>
+<th align="center">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Accept-Charset</td>
+<td align="center">用于指定客户端接收的字符集</td>
+</tr>
+<tr>
+<td align="center">Accept-Encoding</td>
+<td align="center">用于指定可接受的内容编码：如Accept-Econding:gzip.deflate</td>
+</tr>
+<tr>
+<td align="center">Accept-Language</td>
+<td align="center">用于指定一种自然语言，如Accept-Language: zh-cn</td>
+</tr>
+<tr>
+<td align="center">Host</td>
+<td align="center">用于指定被请求资源的Internet主机号和端口号，如Host: <em><a href="http://www.github.com/">www.github.com</a></em></td>
+</tr>
+<tr>
+<td align="center">User-Agent</td>
+<td align="center">客户端将它的操作系统、浏览器和其他属性告负服务器</td>
+</tr>
+<tr>
+<td align="center">Connection</td>
+<td align="center">当前连接是否保持，如Connetcion:Keep-Alive</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>常见的HTTP响应头</p>
+<table>
+<thead>
+<tr>
+<th align="center">响应头</th>
+<th align="center">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Server</td>
+<td align="center">使用的服务器名称，如Server: Apache/1.3.6(Unix)</td>
+</tr>
+<tr>
+<td align="center">Content-Type</td>
+<td align="center">用来指明发送给接收者的实体正文的媒体类型，如Content-Type: text/html;charset=GBK</td>
+</tr>
+<tr>
+<td align="center">Content-Encoding</td>
+<td align="center">与请求头Accept-Encoding对应，告诉浏览器服务端采用的是什么压缩编码</td>
+</tr>
+<tr>
+<td align="center">Content-Language</td>
+<td align="center">描述了资源所用的自然语言，与Accept-Language对应</td>
+</tr>
+<tr>
+<td align="center">Content-Length</td>
+<td align="center">指明实体正文的长度，用以字节方式存储的十进制数字来表示</td>
+</tr>
+<tr>
+<td align="center">Keep-Alives</td>
+<td align="center">保持连接时间，如Keep-Alive: timeout=5, max=120</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>常见的HTTP状态码</p>
+<table>
+<thead>
+<tr>
+<th align="center">状态码</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">200</td>
+<td align="center">客户端请求成功</td>
+</tr>
+<tr>
+<td align="center">302</td>
+<td align="center">临时跳转，跳转的地址通过Location指定</td>
+</tr>
+<tr>
+<td align="center">400</td>
+<td align="center">客户端请求有语法错误不能被服务器识别</td>
+</tr>
+<tr>
+<td align="center">403</td>
+<td align="center">服务器收到请求，但拒绝提供服务</td>
+</tr>
+<tr>
+<td align="center">404</td>
+<td align="center">请求的资源不存在</td>
+</tr>
+<tr>
+<td align="center">500</td>
+<td align="center">服务器发生不可预期的错误</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<h3 id="查看HTTP信息的工具"><a href="#查看HTTP信息的工具" class="headerlink" title="查看HTTP信息的工具"></a>查看HTTP信息的工具</h3><ul>
+<li>Firebug</li>
+<li>HttpFox</li>
+<li>其他</li>
+</ul>
+<h3 id="浏览器缓存机制"><a href="#浏览器缓存机制" class="headerlink" title="浏览器缓存机制"></a>浏览器缓存机制</h3><p>&emsp;&emsp;浏览器缓存是一个比较复杂但又比较重要的的机制</p>
+<p>&emsp;&emsp;对浏览器使用刷新之后，会请求服务端返回新的数据，最重要的是会在<font color="red">请求头</font>中增加两个请求项，<font color="teal">Pargma:no-cache</font>和<font color="red">Cache-Control:no-cache</font>。</p>
+<ol>
+<li>Cache-Control/Pragma（请求头）</li>
+</ol>
+<ul>
+<li><p>这个HTTP Head字段用于指定所有缓存机制在整个请求/响应链中必须服从的指令，而no-cache顾名思义。</p>
+<p>HTTP head Pargmma / Cache-Control字段可选的value</p>
+<table>
+<thead>
+<tr>
+<th align="center">value</th>
+<th align="center">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Public</td>
+<td align="center">所有内容都将被缓存，在响应头中设置</td>
+</tr>
+<tr>
+<td align="center">Private</td>
+<td align="center">内容只缓存到私有缓存中，在响应头中设置</td>
+</tr>
+<tr>
+<td align="center">no-cache</td>
+<td align="center">所有内容都不会被缓存，在请求头和响应头中设置</td>
+</tr>
+<tr>
+<td align="center">no-store</td>
+<td align="center">所有内容都不会缓存到缓存或Internet临时文件中，在响应头中设置</td>
+</tr>
+<tr>
+<td align="center">must-revalidation/proxy-revalidation</td>
+<td align="center">如果缓存的内容失效，请求必须发送到服务器/代理以进行重新验证，在请求头中设置</td>
+</tr>
+<tr>
+<td align="center">max-age=xxx</td>
+<td align="center">缓存的内容将在xxx秒后失效，这个选项只在HTTP1.1中可用，和Last-Modified一起使用时，优先级较高，在响应头中设置</td>
+</tr>
+</tbody></table>
+<ul>
+<li>Cache-Control请求字段被各个浏览器支持得较好，优先级较高。</li>
+<li>Pragma字段的作用和Cache-Control类似</li>
+</ul>
+</li>
+</ul>
+<ol start="2">
+<li>Expires（请求头）</li>
+</ol>
+<p>&emsp;&emsp;Expires通常的使用格式是*<font color="red">Expires: Sat, 25 Feb 2012 12:22:17 GMT</font>*，后面跟着一个日期和时间，超过这个时间后，缓存的内容将失效，也就是浏览器在发出请求之前检查这个页面的字段，看该页面是否已经过期了，过期了就重新向服务器发起请求。</p>
+<ol start="3">
+<li>Last-Modified/Etag（响应头）</li>
+</ol>
+<p>&emsp;&emsp;Last-Modified字段一般用于表示一个服务器上的资源的最后修改时间，资源可以是静态（<font color="teal">静态内容自动加上Last-Modified字段</font>）或者动态的内容（<font color="red">如Servlet提供了一个getLastModified方法用于检查某个动态内容是否已经更新</font>），通过这个最后修改时间可以判断当前请求的资源是否是最新的。一般服务器在<font color="yellow">响应头</font>中返回一个Last-Modified字段，告诉浏览器这个页面最后修改时间，如Last-Modified: Sat, 25 Feb 2012 12:55:04 GMT, 浏览器再次请求时会在<font color="red">请求头</font>中增加一个If-Modified-Since: Sat, 25 Feb 2012 12:55:04 GMT字段，询问当前缓存的页面是否时最新的，如果是最新的就返回<font color="teal">304</font>状态码，告诉浏览器是最新的，服务器也不会传输新的数据。</p>
+<p>&emsp;&emsp;与<em>Last-Modified</em>字段有类似功能的还有一个Etag字段，这个字段的作用是让服务器给每个页面分配一个唯一的编号，然后通过这个编号来区分当前这个页面是否是最新的。</p>
+<h2 id="DNS域名解析"><a href="#DNS域名解析" class="headerlink" title="DNS域名解析"></a>DNS域名解析</h2><p>&emsp;&emsp;在互联网世界中，每个资源都是通过URL来发布和请求资源的，URL中的域名需要解析成IP地址才能与远程主机建立连接，DNS解析就是进行此项工作的。</p>
+<h3 id="DNS域名解析过程"><a href="#DNS域名解析过程" class="headerlink" title="DNS域名解析过程"></a>DNS域名解析过程</h3><p>&emsp;&emsp;当一个用户在浏览器中输入<em><a href="http://www.github.com/">www.github.com</a></em>时，DNS解析大概会进行如下步骤。</p>
+<ol>
+<li><p>浏览器会检查缓存中有没有这个域名对应的解析过的地址，如果缓存中存在，解析过程结束。</p>
+</li>
+<li><p>如果缓存中不存在，浏览器会查找系统缓存中是否有这个域名对应的DNS解析结果。（<font color="teal">hosts文件</font>）</p>
+</li>
+<li><p>在网络配置中，一般都会存在“DNS服务器地址”，这个地址就用于以上两步都不存在缓存的情况。操作系统会将这个域名发送给这里设置的LDNS，也就是本地区的域名服务器，这个DNS通常都提供给你本地互联网接入的一个DNS解析服务。</p>
+<p>这个专门的域名解析服务器性能都较好，一般都会缓存域名解析结果，LDNS主要承担了域名解析的工作。</p>
+</li>
+<li><p>如果LDNS仍然没有命中，就会到Root Server域名服务器请求解析。</p>
+</li>
+<li><p>Root Server域名服务器返回给本地域名服务器一个所查询域的主域名服务器（GTLD Server）地址。GTLD是国际顶级域名服务器，如.com，.cn，.org等，全球只有13台左右。</p>
+</li>
+<li><p>本地域名服务器（Local DNS Server）再向上一步返回的GTLD服务器发送请求。</p>
+</li>
+<li><p>接受请求的GTLD服务器查找并返回此域名对应的Name Server域名服务器的地址，这个Name Server通常就是你注册的域名服务器，例如你在某个域名服务提供商申请的域名，那个这个域名解析任务就由这个域名提供商的服务器完成。</p>
+</li>
+<li><p>Name Server域名服务器会查询存储的域名和IP的映射关系表，在正常情况下都根据域名得到目标IP记录，连同一个TTL值返回给Local DNS Server域名服务器。</p>
+</li>
+<li><p>返回该域名对应的IP和TTL值，Local DNS Server会缓存这个域名和IP的对应关系，缓存的时间由TTL值控制。</p>
+</li>
+<li><p>把解析的结果返回给用户，用户根据TTL值缓存在本地服务器中，域名解析过程结束。</p>
+</li>
+</ol>
+<p>&emsp;&emsp;在实际过程中，可能还有更多步骤，这只是一般情况，如Name Server可能有多级，GTM进行负载均衡设置等。</p>
+<h3 id="跟踪域名解析过程"><a href="#跟踪域名解析过程" class="headerlink" title="跟踪域名解析过程"></a>跟踪域名解析过程</h3><p>&emsp;&emsp;在Linux和Windows下都可以使用nslookup命令来查询域名的解析结果。在Linux下还可以使用dig命令来查询DNS的解析过程。</p>
+<h3 id="清除缓存的域名"><a href="#清除缓存的域名" class="headerlink" title="清除缓存的域名"></a>清除缓存的域名</h3><p>&emsp;&emsp;DNS域名解析有两个地方缓存解析结果，一个是Local DNS Server，另一个是用户的本地机器，这两个缓存都是TTL值和本地缓存大小控制的。但最大缓存时间是TTL值，基本上Local DNS Server的缓存时间很难人工介入。</p>
+<p>&emsp;&emsp;本地缓存可以用如下方式进行清除</p>
+<ul>
+<li><p>Windows</p>
+<p>ipconfig/flushdns</p>
+</li>
+<li><p>Linux</p>
+<p>/etc/init.d/nscd restart</p>
+</li>
+</ul>
+<p>&emsp;&emsp;在Java应用中JVM也会缓存DNS的解析结果，这个缓存由<font color="teal">InetAddress</font>类中完成，其缓存时间比较特殊。其有两种缓存策略。</p>
+<ul>
+<li><font color="red">正确解析结果缓存</font>    有networkaddress.cache.ttl    默认为-1，永不失效</li>
+<li><font color="teal">失败的解析结果缓存</font>    networkaddress.cache.negative.ttl    默认为10，10秒失效</li>
+</ul>
+<p>&emsp;&emsp;修改这两个值有几种方式</p>
+<ul>
+<li>直接修改java.security文件中的默认值</li>
+<li>在Java的启动参数中增加-Dsun.net.inetaddr.ttl=xxx来设置默认值</li>
+<li>通过InetAddress类动态修改</li>
+</ul>
+<p>&emsp;&emsp;如果需要使用InetAddress类解析域名，必须使用单例模式，不然会有严重的性能问题出现。</p>
+<h3 id="几种域名解析方式"><a href="#几种域名解析方式" class="headerlink" title="几种域名解析方式"></a>几种域名解析方式</h3><p>&emsp;&emsp;域名解析记录主要分为以下几种方式</p>
+<ul>
+<li>A记录，Address，用来指定域名对应的IP地址。A记录可以将多个域名解析到一个IP地址，但不能将一个域名解析到多个IP地址。</li>
+<li>MX记录，Mail Exchange，可以将某个域名下的邮件服务器只想自己的Mail Server。如taobao.com的域名的A记录IP地址是155.238.25.xxx，如果将MX记录设置为155.238.25.xxx，即<a href="mailto:&#120;&#x78;&#120;&#x40;&#x74;&#97;&#111;&#98;&#x61;&#111;&#x2e;&#99;&#x6f;&#109;">&#120;&#x78;&#120;&#x40;&#x74;&#97;&#111;&#98;&#x61;&#111;&#x2e;&#99;&#x6f;&#109;</a>的邮件路由，DNS会将邮件发送到155.238.25.xxx所在的服务器，而正常通过Web请求的话<font color="teal">仍然可以解析到A记录的IP地址</font>。</li>
+<li>CNAME记录，Canonical Name（别名解析）。其可以为一个域名设置一个或多个别名。</li>
+<li>NS记录，为某个域名指定DNS解析服务器。</li>
+<li>TXT记录，为某个主机名或域名设置说明。</li>
+</ul>
+<h2 id="CND工作机制"><a href="#CND工作机制" class="headerlink" title="CND工作机制"></a>CND工作机制</h2><p>&emsp;&emsp;CND，内容分布网络（Content Delivery Network），是构筑在现有Internet上的一种先进的流量分配网络。其目的是通过在现有的Internet中增加一层新的网络架构，使用户可以就近取得所需的内容，提高用户访问网络的想要速度。</p>
+<p>&emsp;&emsp;<font color="red">CDN = Mirror + Cache + GSLB。</font>其可以明显提高Internet中信息流动的效率。</p>
+<p>&emsp;&emsp;通常来说，CDN以缓存网站中的静态数据为主。CDN一般会达到以下一个目标。</p>
+<ul>
+<li>可拓展</li>
+<li>安全性</li>
+<li>可靠性、响应和执行（Reliability、Responsiveness和Performance）。</li>
+</ul>
+<h3 id="CDN架构"><a href="#CDN架构" class="headerlink" title="CDN架构"></a>CDN架构</h3><p>&emsp;&emsp;一个用户访问某个静态文件，域名为cdn.taobao.com。</p>
+<ul>
+<li>首先向Local DNS服务器发起请求</li>
+<li>经过迭代解析后回到域名的注册服务器解析</li>
+<li>指向CDN全局中的DNS负载均衡服务器</li>
+<li>GTM最终返回里这个访问用户最”近”的节点</li>
+<li>用户去CND拿到静态文件</li>
+</ul>
+<h3 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h3><p>&emsp;&emsp;负载均衡（Load Balance）就是对工作任务进行平衡、分摊到多个操作单元上执行，共同完成任务。其可以<font color="teal">提高服务器响应速度以及利用效率，避免软件或者硬件模块出现单点失效，解决网络拥塞问题，实现地理位置无关性，为用户提供较为一致的访问质量</font>。</p>
+<p>&emsp;&emsp;通常有三种负载均衡架构：</p>
+<ul>
+<li>链路负载均衡：通过DNS解析成不同的IP，用户根据IP来访问不同的目标服务器</li>
+<li>集群负载均衡：<ul>
+<li>硬件负载均衡：使用一台专门的硬件设备来转发请求</li>
+<li>软件负载均衡：1. 在网络层利用IP地址进行地址转发。2. 根据访问用户的HTTP请求头来进行负载均衡</li>
+</ul>
+</li>
+<li>操作系统负载均衡：利用操作系统级别的软中断或者硬件中断来达到负载均衡，如可以设置多队列网卡灯。</li>
+</ul>
+<p>&emsp;&emsp;CND、Web服务或者分布式数据集群中都可以使用，后两种较为常见。</p>
+<h3 id="CND动态加速"><a href="#CND动态加速" class="headerlink" title="CND动态加速"></a>CND动态加速</h3><p>&emsp;&emsp;CDN动态加速的技术原理是在CDN的DNS解析中通过动态的链路探测来寻找回源最好的一条路径，然后通过DNS的调度将所有请求调度到选定的这条路径上回源，从而加速用户的访问效率。</p>
+<p>&emsp;&emsp;由于CDN节点遍布全球，所以当用户接入一个CDN节点后，可以选择一条从离用户最近的CND节点到源站链路最好的路径进行数据传输。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><ul>
+<li>B/S结构</li>
+<li>如何发起一个请求</li>
+<li>HTTP解析</li>
+<li>DNS域名解析</li>
+<li>CDN工作机制</li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li>《深入分析Java Web技术内幕》，许令波.</li>
+</ul>
+]]></content>
+      <categories>
+        <category>深入分析JavaWeb技术内幕读书笔记</category>
+      </categories>
+      <tags>
+        <tag>笔记</tag>
+        <tag>书籍</tag>
+        <tag>读书笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>读书笔记-深入分析Java Web技术内幕-第三章</title>
+    <url>/2020/09/19/Notes-Book-Analysis-Javaweb-ChapterThree/</url>
+    <content><![CDATA[<h1 id="第三章-深入分析Java-Web中的中文编码问题"><a href="#第三章-深入分析Java-Web中的中文编码问题" class="headerlink" title="第三章    深入分析Java Web中的中文编码问题"></a>第三章    深入分析Java Web中的中文编码问题</h1><hr>
+<p>&emsp;&emsp;编码问题在Java中更加明显，因为Java是跨平台语言，在不同平台的编码之间切换较多。</p>
+<h2 id="几种常见的编码形式"><a href="#几种常见的编码形式" class="headerlink" title="几种常见的编码形式"></a>几种常见的编码形式</h2><h3 id="为什么要编码"><a href="#为什么要编码" class="headerlink" title="为什么要编码"></a>为什么要编码</h3><ul>
+<li>在计算机中存储信息的最小单位是1个字节，即8个bit，所以能表示的字符范围为0—255个。</li>
+<li>人类要表示的符号太多，无法用一个字节表示。</li>
+</ul>
+<h3 id="如何“翻译”"><a href="#如何“翻译”" class="headerlink" title="如何“翻译”"></a>如何“翻译”</h3><p>&emsp;&emsp;在计算机中提供了多种翻译<font color="teal">（编码）</font>方式，如：</p>
+<ul>
+<li>ASCII码<ul>
+<li>共有128个，用一个字节的低7位表示，0-31是控制字符，如换行，回车，删除。32-126是打印字符。可以通过键盘输入并且能够显示出来。</li>
+</ul>
+</li>
+<li>ISO-8859-1<ul>
+<li>128个字符是不够用的，于是ISO组织在ACSII码基础上制定了一系列标准来拓展ASCII编码。<ul>
+<li>ISO-8859-1，涵盖了大多数西欧语言字符，应用广泛。其仍然是单字节编码，共能表示256个字符。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>GB2312<ul>
+<li>全称是《信息技术 中文编码字符集》，是双字节编码，总的编码范围是A1-F7，其中A1-A9是符号区，总共包含682个字符；B0-F7是汉字区，包含6763个汉字。</li>
+</ul>
+</li>
+<li>GBK<ul>
+<li>全称是《汉字内码扩展规范》，是国家技术监督局为Windows 95制定的新的汉字内码规范，它的出现是为了拓展GB2312，并加入更多的汉字。</li>
+</ul>
+</li>
+<li>GB18030<ul>
+<li>全称是《信息技术 中文编码字符集》，是我国的强制标准，它可能是单字节、双字节或者是四字节编码。其与GB2312编码兼容，但其在实际应用系统中使用的并不广泛。</li>
+</ul>
+</li>
+<li>UTF-16<ul>
+<li>ISO试图创建一个全新的超语言字典。Unicode是Java和XML的基础。其用两个字节来表示Unicode的转化格式。两个字节是16bit，这也是UTF-16名字的由来。</li>
+</ul>
+</li>
+<li>UTF-8<ul>
+<li>UTF-16统一采用两个字节来表示一个字符，这导致很大一部分用一个字节可以表示的字符现在要用两个来表示。所以UTF-8采用了一种变长技术，每个编码区域有不同的字码长度。<font color="gold">不同的字符可以由1-6个字节组成。</font></li>
+<li>UTF-8有一下编码规则<ul>
+<li>如果是1个字节，最高位（第8位）为0，则表示着是1个ASCII字符（00-7F）。<font color="teal">这也说明所有ASCII编码已经是UTF-8了</font>。</li>
+<li>如果是一个字节，以11开头，则连续的1的个数暗示这个字符的字节数，如：110xxxxx代表它是双字节UTF-8字符的首字节。</li>
+<li>如果是一个字节，以10开头，表示它不是首字节，则需要向前查找才能得到当前字符的首字节。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="在Java中需要编码的场景"><a href="#在Java中需要编码的场景" class="headerlink" title="在Java中需要编码的场景"></a>在Java中需要编码的场景</h2><h3 id="在I-O操作中存在的编码"><a href="#在I-O操作中存在的编码" class="headerlink" title="在I/O操作中存在的编码"></a>在I/O操作中存在的编码</h3><p>&emsp;&emsp;涉及编码的地方一般都在从字符到字节或者从字节到字符上，而需要这种转换的场景主要是I/O，包括磁盘I/O和网络I/O。下图是Java中处理I/O问题的接口。</p>
+<p><img src="/2020/09/19/Notes-Book-Analysis-Javaweb-ChapterThree/InterfaceHandlesIOProblem-1.png" alt="InterfaceHandlesIOProblem-1"></p>
+<p>&emsp;&emsp;Reader类是在Java的I/O中读字符的父类，而InputStream类是读字节的父类。<font color="teal">InputStreamReader类</font>就是关联字节到字符的桥梁，它负责在I/O过程中处理读取字节到字符的转换，而对具体字节到字符的解码实现，它有委托<font color="red">StreamDecoder</font>去做，在StreamDecoder解码过程中，必须由用户指定Charset编码格式。值得注意的是，如果没有指定Charset，则将使用本地环境中的默认字符集，如在中文环境中将使用GBK编码。</p>
+<p>&emsp;&emsp;写的情况和读类似，字符的父类是Writer，字节的父类是OutputStream，通过<font color="skyblue">OutputStreamWriter</font>转换字符到字节，如下图所示。</p>
+<p><img src="/2020/09/19/Notes-Book-Analysis-Javaweb-ChapterThree/InterfaceHandlesIOProblem-2.png" alt="InterfaceHandlesIOProblem-2"></p>
+<p>&emsp;&emsp;同样，StreamEncoder类负责将字符编码成字节，编码格式和默认编码规则与解码是一致的。下面是一段实现了文件读写功能的代码。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">String file = <span class="string">&quot;c:/stream.txt&quot;</span>;</span><br><span class="line">String charset = <span class="string">&quot;UTF-8&quot;</span>;</span><br><span class="line"><span class="comment">// 写字符转换成字节流</span></span><br><span class="line">FileOutputStream outputStream = <span class="keyword">new</span> FIleOutputStream(file);</span><br><span class="line">OutputStreamWriter writer = <span class="keyword">new</span> OutputStreamWriter(outputStream, charset);</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">  writer.write(<span class="string">&quot;这是要保存的中文字符&quot;</span>);</span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">  writer.close();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 读取字节转换为字符</span></span><br><span class="line">FileInputStream inputStream = <span class="keyword">new</span> FileInputStream(file);</span><br><span class="line">InputStreamReader reader = <span class="keyword">new</span> InputStreamReader(inputStream, charset);</span><br><span class="line">StringBuffer buffer = <span class="keyword">new</span> StringBuffer();</span><br><span class="line"><span class="keyword">char</span>[] buf = <span class="keyword">new</span> <span class="keyword">char</span>[<span class="number">64</span>];</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">  <span class="keyword">while</span> ((count = reader.read(buf)) != -<span class="number">1</span>) &#123;</span><br><span class="line">    buffer.append(buffer, <span class="number">0</span>, count);</span><br><span class="line">  &#125;</span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">  reader.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;一般在应用程序中，涉及I/O操作时要注意指定<font color="red">相同</font>的Charset字符集。</p>
+<h3 id="在内存操作中的编码"><a href="#在内存操作中的编码" class="headerlink" title="在内存操作中的编码"></a>在内存操作中的编码</h3><p>&emsp;&emsp;在Java开发中除了I/O操作设计编码外，最常见的是在内存中进行从字符到字节的数据类型转换，在Java中用String表示字符串，所以String类提供了转换到字节的方法，也支持将字节转换为字符串的构造函数，代码如下。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">String s = <span class="string">&quot;这是一段中文字符串&quot;</span>;</span><br><span class="line"><span class="keyword">byte</span>[] b = s.getBytes(<span class="string">&quot;UTF-8&quot;</span>);</span><br><span class="line">String n = <span class="keyword">new</span> String(b, <span class="string">&quot;UTF-8&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;同时，Charset类也提供encode与decode方法，分别对应char[]到byte[]的编码和byte[]到char[]的解码。其代码如下。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Charset charset = Charset.forName(<span class="string">&quot;UTF-8&quot;</span>);</span><br><span class="line">ByteBuffer byteBuffer = charset.encode(string);</span><br><span class="line">CharBuffer charBuffer = charset.decode(byteBuffer);</span><br></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;如上述代码所示，编码和解码都在一个类中完成，通过forName设置编解码字符集，这样更容易实现统一编码格式。</p>
+<p>&emsp;&emsp;在Java中还有一个ByteBuffer类，它提供了一种char和byte之间的软转换，它们之间不需要编码和解码，只是把一个16bit的char拆为2个8bit的byte表示，它们的实际值并没有改变，仅仅是数据的类型做了转换，代码如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">ByteBuffer heapByteBuffer = ByteBuffer.allocate(<span class="number">1024</span>);</span><br><span class="line">ByteBuffer byteBuffer = heapByteBuffer.putChar(c);</span><br></pre></td></tr></table></figure>
+
+<h2 id="在Java中如何编码"><a href="#在Java中如何编码" class="headerlink" title="在Java中如何编码"></a>在Java中如何编码</h2><p>&emsp;&emsp;这里将用实际例子介绍Java中如何实现编码和解码，以”I am 君山”这个字符穿为例子。代码如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">encode</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  String name = <span class="string">&quot;I am 君山&quot;</span>;</span><br><span class="line">  toHex(name.toCharArray());</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">byte</span>[] iso8859 = name.getBytes(<span class="string">&quot;ISO-8859-1&quot;</span>);</span><br><span class="line">    toHex(iso8859);</span><br><span class="line">    <span class="keyword">byte</span>[] gb2312 = name.getBytes(<span class="string">&quot;GB2312&quot;</span>);</span><br><span class="line">    toHex(gb2312);</span><br><span class="line">    <span class="keyword">byte</span>[] gbk = name.getBytes(<span class="string">&quot;GBK&quot;</span>);</span><br><span class="line">    toHex(gbk);</span><br><span class="line">    <span class="keyword">byte</span>[] utf16 = name.getBytes(<span class="string">&quot;UTF-16&quot;</span>);</span><br><span class="line">    toHex(utf16);</span><br><span class="line">    <span class="keyword">byte</span>[] utf8 = name.getBytes(<span class="string">&quot;UTF-8&quot;</span>);</span><br><span class="line">    toHex(utf8);</span><br><span class="line">  &#125; <span class="keyword">catch</span> (UnsupportedEncodingException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>深入分析JavaWeb技术内幕读书笔记</category>
+      </categories>
+      <tags>
+        <tag>笔记</tag>
+        <tag>书籍</tag>
+        <tag>读书笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>读书笔记-深入分析Java Web技术内幕-第二章</title>
+    <url>/2020/08/20/Notes-Book-Analysis-Javaweb-ChapterTwo/</url>
+    <content><![CDATA[<h1 id="第二章-深入分析Java-I-O的工作机制"><a href="#第二章-深入分析Java-I-O的工作机制" class="headerlink" title="第二章    深入分析Java I/O的工作机制"></a>第二章    深入分析Java I/O的工作机制</h1><hr>
+<p>&emsp;&emsp;I/O问题是当今Web应用中所面临的主要问题。</p>
+<h2 id="Java的I-O类库的基本架构"><a href="#Java的I-O类库的基本架构" class="headerlink" title="Java的I/O类库的基本架构"></a>Java的I/O类库的基本架构</h2><a id="more"></a>
+
+<p>&emsp;&emsp;I/O问题是任何编程语言都无法回避的问题。</p>
+<p>&emsp;&emsp;Java的I/O操作类在java.io包下，大概有奖金80个类，这些类大概可以分成4组。</p>
+<ul>
+<li><font color="red">基于字节操作的I/O接口：</font>InputStream和OutputStream</li>
+<li><font color="teal">基于字符操作的I/O接口：</font>Writer和Reader</li>
+<li><font color="red">基于磁盘操作的I/O操作：</font>File</li>
+<li><font color="teal">基于网络操作的I/O接口：</font>Socket</li>
+</ul>
+<p>&emsp;&emsp;前两组主要是<font color="red">传输数据的格式</font>，后两组主要是<font color="teal">传输数据的方式</font>，虽然Socket类并不在java.io包下，因为个人（本书作者）认为I/O的核心问题要么是数据格式影响I/O操作，要么是传输方式影响I/O操作，<font color="yellow">也就是将什么样的数据写到什么地方的问题</font>。</p>
+<h3 id="基于字节的I-O操作接口"><a href="#基于字节的I-O操作接口" class="headerlink" title="基于字节的I/O操作接口"></a>基于字节的I/O操作接口</h3><p>&emsp;&emsp;基于字节的I/O操作接口输入和输出分别是<font color="red">InputStream</font>和<font color="teal">OutputStream</font>，InputStream的类层次结构如下图所示。</p>
+<p><img src="/2020/08/20/Notes-Book-Analysis-Javaweb-ChapterTwo/InputStreamClassHierarchy.png" alt="InputStreaClassHierarchy"></p>
+<p>&emsp;&emsp;输入流根据<font color="red">数据类型</font>和<font color="teal">操作方式</font>又被划分为若干个子类，每个子类分别处理不同的操作类型。</p>
+<p>&emsp;&emsp;输出流OutputStream的层次结构与输入流InputStream类似，如下图所示。</p>
+<p><img src="/2020/08/20/Notes-Book-Analysis-Javaweb-ChapterTwo/OutputStreamClassHierarchy.jpg" alt="OutputStreaClassHierarchy"></p>
+<p>&emsp;&emsp;有两点值得注意：</p>
+<ul>
+<li><font color="red">操作数据的方式是可以组合使用的</font></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">OutputStream out = <span class="keyword">new</span> BufferedOutputStream(<span class="keyword">new</span> ObjectOutputStream(<span class="keyword">new</span> FileOutputStream(<span class="string">&quot;filename&quot;</span>)));</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><font color="teal">必须要指定流最终写到什么地方，要么写到磁盘，要么是写到网络中</font></li>
+</ul>
+<p>&emsp;&emsp;写网络其实也是写文件的一种，只不过写网络还有一步处理，让底层操作系统将数据传送到其他地方而非本地。</p>
+<h3 id="基于字符的I-O操作接口"><a href="#基于字符的I-O操作接口" class="headerlink" title="基于字符的I/O操作接口"></a>基于字符的I/O操作接口</h3><p>&emsp;&emsp;<font color="red">不管是磁盘还是网络传输，最小的存储单位都是字节，而不是字符</font>。增加操作字符的I/O接口的理由，通常程序中操作的数据都是字符形式的，从字符到字节必须要经过编码转换，而编码比较耗时。</p>
+<p>&emsp;&emsp;写字符的I/O操作类如下图所示，Writer类提供了一个抽象方法*write(char cbuf[], int off, int len)*。</p>
+<p><img src="/2020/08/20/Notes-Book-Analysis-Javaweb-ChapterTwo/WriterClassHierarchy.png" alt="WriterClassHierarchy"></p>
+<p>&emsp;&emsp;读字符串的操作接口也有类似的类结构。</p>
+<p><img src="/2020/08/20/Notes-Book-Analysis-Javaweb-ChapterTwo/ReaderClassHierarchy.png" alt="ReaderClassHierarchy"></p>
+<p>&emsp;&emsp;读字符串的操作接口是*int read(char chuff[], int off, int len)*，返回读到的n个字节数。</p>
+<p>&emsp;&emsp;不管是Writer还是Reader类，它们都只定义了读取或写入的数据字符的方式，并没有规定数据要写到哪里。</p>
+<h3 id="字节与字符的转换接口"><a href="#字节与字符的转换接口" class="headerlink" title="字节与字符的转换接口"></a>字节与字符的转换接口</h3><p>&emsp;&emsp;数据持久化或网络传输都是以字节进行的，所以必须要有从字符到字节或字节到字符的转换。</p>
+<p>&emsp;&emsp;读的转化过程如下图所示。</p>
+<p><img src="/2020/08/20/Notes-Book-Analysis-Javaweb-ChapterTwo/CharacterDecodingRelatedClassStructure.png" alt="CharacterDecodingRelatedClassStructure"></p>
+<p>&emsp;&emsp;InputStreamReader类使用字节到字符的转化桥梁，从InputStream到Reader的过程要制定编码字符集，否则将采用操作系统默认的字符集，<font color="teal">很可能出现乱码的情况</font>，StreamDecoder是字节到字符的解码的实现类。也就是，如果用下面的代码读取一个文件时：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">  StringBuffer str = <span class="keyword">new</span> StringBuffer();</span><br><span class="line">  <span class="keyword">char</span>[] buf = <span class="keyword">new</span> <span class="keyword">char</span>[<span class="number">1024</span>];</span><br><span class="line">  FileReader f = <span class="keyword">new</span> FileReader(<span class="string">&quot;file&quot;</span>);</span><br><span class="line">  <span class="keyword">while</span> (f.read(buf) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    str.append(buf);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;FileReader类按照上图读取文件，FileReader继承了InputStreamReader，读取文件流，然后通过StreamDecoder解码成char，这里的解码字符为默认字符集。</p>
+<p>&emsp;&emsp;写入也是类似的过程。</p>
+<p><img src="/2020/08/20/Notes-Book-Analysis-Javaweb-ChapterTwo/CharacterEncodingRelatedClassStructure.png" alt="CharacterEncodingRelatedClassStructure"></p>
+<p>&emsp;&emsp;通过OutputSteamWriter类完成了从字符到字节的编码过程，由StreamEncoder完成编码过程。</p>
+<h2 id="磁盘I-O工作机制"><a href="#磁盘I-O工作机制" class="headerlink" title="磁盘I/O工作机制"></a>磁盘I/O工作机制</h2><h3 id="几种访问文件的方式"><a href="#几种访问文件的方式" class="headerlink" title="几种访问文件的方式"></a>几种访问文件的方式</h3><p>&emsp;&emsp;读取和写入都会调用操作系统提供的接口，只要是系统调用就可能会存在<font color="teal">内核空间地址和用户空间地址切换的问题</font>，这是为了保护内核程序运行的安全性，但是这也存在数据可能需要从内核空间向用户空间复制的问题。</p>
+<p>&emsp;&emsp;如果遇到非常耗时的操作，如复制，数据需要从用户空间复制到内存空间，又从内存空间复制到用户空间，将会非常缓慢，为了加速I/O访问，<font color="teal">操作系统会在内核空间使用缓存机制，也就是将从磁盘读的文件按照一定的组织方式进行缓存</font>，如果用户程序访问的是同一段磁盘地址的空间数据，那么操作系统将从内核缓存中直接取出返回给用户程序，减少I/O的响应时间。</p>
+<ul>
+<li><font color="red">标准访问文件的方式</font></li>
+</ul>
+<p>&emsp;&emsp;标准访问文件的方式是，当应用程序调用read()接口时，操作系统检查在内核的告诉缓存中有没有需要的数据，如果已经缓存了，就直接从缓存中获取。如果没有，则从磁盘中读取，<font color="red">然后缓存在操作系统的缓存中</font>。</p>
+<p>&emsp;&emsp;写入的方式是，当用户的应用程序调用write()接口将数据从用户地址空间复制到内核地址空间的缓存中，这是对<font color="teal">用户应用程序而言</font>写操作已经完成，至于什么时候写入到磁盘中由<font color="red">操作系统</font>决定，除非显式调用<font color="teal">sync</font>同步命令。</p>
+<p>&emsp;&emsp;标准访问文件的方式如下图所示。</p>
+<p><img src="/2020/08/20/Notes-Book-Analysis-Javaweb-ChapterTwo/StandardWaytoAccessFiles.png" alt="StandardWaytoAccessFiles"></p>
+<ul>
+<li><font color="teal">直接I/O的方式</font></li>
+</ul>
+<p>&emsp;&emsp;所谓的直接I/O的方式就是应用程序直接访问磁盘数据，而不经过操作系统内核数据缓冲区，这样做的目的就是减少一次从内核缓冲区到用户缓存的数据复制。<font color="red">这种访问文件的方式，通常是在对数据的缓存管理由应用程序实现的数据库管理系统中。</font>如在数据库管理系统中，系统明确地知道应该缓存哪些数据，应该失效哪些数据，还可以对一些热点数据做预加载，提前将热点数据加载到缓存中，可以加速数据的访问效率。在这些情况下， 如果是由<font color="teal">操作系统进行缓存，则很难做到，因为操作系统并不知道哪些是热点数据，哪些数据只会访问一次就不会再访问，操作系统知识简单地缓存最近一次从硬盘中读取的数据。</font></p>
+<p>&emsp;&emsp;但是直接I/O也有负面影响，如果访问的数据不在应用程序缓存中，那么每次数据都要直接从硬盘加载，这种直接加载会非常缓慢。通常直接I/O会与<font color="teal">异步I/O</font>结合使用，会得到比较好的性能。</p>
+<p>&emsp;&emsp;直接I/O的方式如下图所示。</p>
+<p><img src="/2020/08/20/Notes-Book-Analysis-Javaweb-ChapterTwo/DirectWaytoAccessFiles.png" alt="DirectWaytoAccessFiles"></p>
+<ul>
+<li><font color="yellow">同步访问文件的方式</font></li>
+</ul>
+<p>&emsp;&emsp;数据的读取和写入都是同步操作的，它与<font color="teal">标准访问文件的方式</font>不同的是，只有当数据被成功写入到磁盘才返回给应用程序成功的标志。</p>
+<p>&emsp;&emsp;这种访问文件的方式性能比较差，只有在一些对数据安全性要求比较高的场景中才会使用，而且通常这种操作方式的硬件都是定制的。</p>
+<p>&emsp;&emsp;同步访问文件的方式如下图所示。</p>
+<p><img src="/2020/08/20/Notes-Book-Analysis-Javaweb-ChapterTwo/SynchronousWaytoAccessFiles.png" alt="SynchronousWaytoAccessFiles"></p>
+<ul>
+<li><font color="pink">异步访问文件的方式</font></li>
+</ul>
+<p>&emsp;&emsp;异步访问文件的方式就是当访数据的线程发出请求之后，线程会接着去处理其他事情，而不是阻塞等待，当请求的数据返回后继续处理下面的事情。<font color="teal">这种访问文件的方式可以明显提高应用程序的效率，但是不会改变访问文件的效率。</font></p>
+<p>&emsp;&emsp;异步访问文件的方式如下图所示。</p>
+<p><img src="/2020/08/20/Notes-Book-Analysis-Javaweb-ChapterTwo/AsynchronousWaytoAccessFiles.png" alt="AsynchronousWaytoAccessFiles"></p>
+<ul>
+<li><font color="blue">内存映射的方式</font></li>
+</ul>
+<p>&emsp;&emsp;内存映射的方式是指操作系统将内存的某一块区域与磁盘中的文件相关联起来，当要访问内存中的一段数据时，转换为访问文件的某一段数据。这种方式的目的同样是减少数据从内核空间缓存到用户空间缓存到数据复制操作，这两个空间的数据是共享的。</p>
+<p><img src="/2020/08/20/Notes-Book-Analysis-Javaweb-ChapterTwo/WayofMemoryMaps.png" alt="WayofMemoryMaps"></p>
+<h3 id="Java访问磁盘文件"><a href="#Java访问磁盘文件" class="headerlink" title="Java访问磁盘文件"></a>Java访问磁盘文件</h3><ul>
+<li>数据在磁盘中的唯一最小描述就是文件，上层应用程序只能通过文件来操作磁盘上的数据，文件也是操作系统和磁盘驱动器交互的最小单元。</li>
+<li>Java中的File并不代表一个真实存在的文件对象，当你指定一个路径描述符时，它会返回一个代表这个路径的虚拟对象，这个可能是一个真实存在的文件或者是一个包含多个文件的目录。</li>
+<li>在真正读取这个文件时，会检查一个文件是否存在。</li>
+<li>FileInputStream类是操作一个文件的接口，在创建一个FileInputStream对象时会创建一个FileDescriptor对象，这个对象代表一个真正存在的文件对象的描述。</li>
+<li>可以使用*getFD()*方法获取真正操作的与底层操作系统相关联的文件描述（FileDescriptor）。</li>
+</ul>
+<p>&emsp;&emsp;读取文件的实例：</p>
+<ul>
+<li>当传入一个文件路径时，会根据这个路径创建一个File对象来表示这个文件</li>
+<li>根据这个File对象创建真正读取文件的操作对象，这时会<font color="red">真正创建一个关联真实存在的磁盘文件的文件描述符FileDescroptor</font>，通过这个对象可以直接控制这个磁盘文件</li>
+<li>设读取的是字符格式，则需要StreamDecoder类将byte解码成char格式。<ul>
+<li><font color="teal">操作系统会帮助完成从磁盘驱动器上读取一段数据。</font>不同的操作系统有着不同的文件系统。</li>
+</ul>
+</li>
+</ul>
+<p>&emsp;&emsp;从磁盘读取文件流程如下图所示。</p>
+<p><img src="/2020/08/20/Notes-Book-Analysis-Javaweb-ChapterTwo/ReadFilesFromDisk.png" alt="ReadFilesFromDisk"></p>
+<h3 id="Java序列化技术"><a href="#Java序列化技术" class="headerlink" title="Java序列化技术"></a>Java序列化技术</h3><p>&emsp;&emsp;Java序列化就是将一个对象转化成一串二进制表示的字节数组，通过保存或转移这些字节数据来达到持久化的目的。<font color="yellow">需要持久化，对象必须继承Serializable接口，</font>反序列化则是相反的过程，可以将这个字节数组重新构造成为对象，<font color="teal">在反序列化时，必须有原始类作为模版。由此可以，<font color="red">序列化的数据并不像class文件那样保存类的完整的结构信息。</font>如下代码示例：</font></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Serialize</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = -<span class="number">6849794470754660011L</span>;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">int</span> num = <span class="number">1390</span>;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      FileOutputStream fos = <span class="keyword">new</span> FileOutputStream(<span class="string">&quot;~/serialize.dat&quot;</span>);</span><br><span class="line">      ObjectOutputStream oos = <span class="keyword">new</span> ObjectOutputStream(fos);</span><br><span class="line">      Serialize serialize = <span class="keyword">new</span> Serialize();</span><br><span class="line">      oos.writeObject(serialize);</span><br><span class="line">      oos.flush();SerializedFileBinaryByteData.png</span><br><span class="line">      oos.close();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">      e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;序列化的文件二进制字节数据如下：</p>
+<p><img src="/2020/08/20/Notes-Book-Analysis-Javaweb-ChapterTwo/SerializedFileBinaryByteData.png" alt="SerializedFileBinaryByteData"></p>
+<ul>
+<li>第一部分是序列化头文件<ul>
+<li>AC ED: STREAM_MAGIC 声明使用了序列化协议</li>
+<li>00 05: STREAM_VERSION 序列化协议版本</li>
+<li>73: TC_OBJECT 声明这是一个新的对象</li>
+</ul>
+</li>
+<li>第二部分是要序列化的类的描述，在这里是Serialize类<ul>
+<li>72: TC_CLASSDESC 声明这里开始一个新的ckass</li>
+<li>00 11: class名字的长度是17字节</li>
+<li>63 6F 6D 70 69 6C 65 2E 53 65 72 69 61 6C 69 7A 65: Serialize的完整类名</li>
+<li>A0 F0 A4 38 7A 3B D1 55: SerialVersionUID, 序列化ID, 如果没有制定. 则会由算法随机生成一个8字节的ID</li>
+<li>02: 标记号, 该值声明该对象支持序列化</li>
+<li>00 01: 该类所包含的域的个数为1</li>
+</ul>
+</li>
+<li>第三部分是对象中各个属性的描述项<ul>
+<li>49: 域类型，49代表”I”，也就是Int类型</li>
+<li>00 03: 域名字的长度，为3</li>
+<li>6E 75 6D: num属性的名字</li>
+</ul>
+</li>
+<li>第四部分输出该对象的父类信息描述，这里没有父类，如果有，则数据格式与第二部分一样<ul>
+<li>78: TC_ENDBLOCKDATA，对象块结束的标志</li>
+<li>70: TC_NULL，说明没有其他超类的标志</li>
+</ul>
+</li>
+<li>第五部分输出对象的属性项的实际值，如果属性项是一个对象，那么这里还将序列化这个对象，规则和第二部分一样<ul>
+<li>00 00 05 6E: 1390的数值</li>
+</ul>
+</li>
+</ul>
+<p>&emsp;&emsp;虽然Java的序列化能够保证对象状态的持久保存，但是遇到一些对象结构复杂的情况还是比较难以处理的，下面是一些复杂情况的总结。</p>
+<ul>
+<li><font color="red">当父类继承<em>Serializable</em>接口时，所有子类都可以被序列化。</font></li>
+<li><font color="teal">子类实现了Serializable接口，父类没有，父类中的属性不能被序列化（不报错，数据会丢失），但是在子类中属性仍能被正确序列化。</font></li>
+<li><font color="yellow">如果序列化的属性是对象，则这个对象也必须实现Serializable接口，否则会报错。</font></li>
+<li><font color="pink">在反序列化时，如果对象的属性有修改或删减，则修改的部分属性会丢失，但不会报错。</font></li>
+<li><font color="orange">在反序列化时，如果serialVersionUID被修改，则反序列化时会失败。</font></li>
+</ul>
+<p>&emsp;&emsp;在纯Java环境下，Java序列化能够很好的工作，但是在多语言环境下，用Java序列化存储后，很难用其他语言还原出结果，在这种情况下，推荐使用通用的数据结构，如JSON或者XML结构数据。工具：Google的protobuf等。</p>
+<h2 id="网络I-O工作机制"><a href="#网络I-O工作机制" class="headerlink" title="网络I/O工作机制"></a>网络I/O工作机制</h2><p>&emsp;&emsp;数据从一代主机发送到网络中的另一台主机需要经过很多步骤。</p>
+<ul>
+<li>沟通意向</li>
+<li>物理链路</li>
+<li>通信协议</li>
+</ul>
+<p>&emsp;&emsp;本节重点是通信协议和完成数据传输。</p>
+<h3 id="TCP状态转化"><a href="#TCP状态转化" class="headerlink" title="TCP状态转化"></a>TCP状态转化</h3><p>&emsp;&emsp;如何建立和关闭一个TCP连接，TCO连接的状态转化如下图所示。</p>
+<p><img src="/2020/08/20/Notes-Book-Analysis-Javaweb-ChapterTwo/TCPStateTransitionDiagram.png" alt="TCPStateTransitionDiagram"></p>
+<ul>
+<li>（1）CLOSED：起始点，在超时或者连接关闭时进入此状态。</li>
+<li>（2）LISTEN：Server端在等待连接时的状态，Server端此时会调用Socket、bind、listen函数，这被称之为应用程序被动打开（等待客户端连接）。</li>
+<li>（3）SYN-SENT：客户端发起连接，发送SYN（同步序列编号，<em>Syn</em>chronize Sequence Numbers）给服务器端。如果服务器端不能连接，则直接进入CLOSED状态。</li>
+<li>（4）SYN-RCVD：与（3）对应，服务器接受客户端的SYN请求，服务端由LISTEN状态进入SYN-RCVD状态。同时服务器要回应一个ACK（确认字符，<em>Ack</em>nowledge character），发送一个SYN给客户端；另外一种情况是，客户端在发起SYN端同时接收到服务器端的SYN请求，客户端会由SYN-SENT状态转换到SYN-RCVD状态。</li>
+<li>（5）ESTABLISHED：服务器端和客户端在完成3次握手后进入建立状态，说明已经可以传输数据了。</li>
+<li>（6）FIN-WAIT-1：主动关闭的一方，由状态5进入此状态。具体动作是发送FIN给对方。</li>
+<li>（7）FIN-WAIT-2：主动关闭的一方，接收到对方的FIN ACK，进入此状态。由此不能再接收对方的数据，但是能够向对方发送数据。</li>
+<li>（8）CLOSE-WAIT：接收到FIN以后，被动关闭的一方进入此状态。具体动作是在接收到FIN的同时发送ACK。</li>
+<li>（9）LAST-ACK：被动关闭的一方，发起关闭请求，由状态（8）进入此状态。具体动作是发送FIN给对方，同时在接收到ACK时进入CLOSED状态。</li>
+<li>（10）CLOSING：两边同时发起关闭请求时，会由FIN-WAIT-1进入此状态。具体动作是接收到FIN请求，同时响应一个ACK。</li>
+<li>（11）TIME-WAIT：这个状态比较复杂，也是最常见的一个状态，有3个状态可以转化为此状态。<ul>
+<li>由FIN-WATI-2转换到TIME-WAIT，具体情况是：在双方不同时发起FIN的情况下，主动关闭的一方在完成自身发起的关闭请求后，接收到被动关闭一方的FIN后进入的状态。</li>
+<li>由CLOSING转换到TIME-WAIT，具体情况是：在双方同时发起关闭，都做了发起FIN的请求，同时接收到了FIN并做了ACK的情况下，这时就由CLOSING状态进入TIME-WAIT状态。</li>
+<li>由FIN-WAIT-1转换到TIME-WAIT，具体情况是：同时接收到FIN（对方发起）和ACK（本身发起的FIN的回应），它与CLOSING转换到TIME-WAIT的区别在于，本身发起的FIN回应的ACK先于对方的FIN请求到达，而由CLOSING转换到TIME-WAIT则是FIN先到达。</li>
+</ul>
+</li>
+</ul>
+<p>&emsp;&emsp;搞清楚TCP连接到几种状态转换是很有帮助的，如TCP网络参数调优。</p>
+<h3 id="影响网络传输的因素"><a href="#影响网络传输的因素" class="headerlink" title="影响网络传输的因素"></a>影响网络传输的因素</h3><p>&emsp;&emsp;将一份数据从一个地方正确地传输到另一个地方所需要的时间称之为响应时间。影响的因素常见的有：</p>
+<ul>
+<li>网络带宽：一条物理链路在1s内能够传输的最大比特数。</li>
+<li>传输距离：</li>
+<li>TCP拥塞控制：带宽延迟乘积，拥塞控制，TCP缓冲区的大小。带宽 * RTT（Round-Trip Time，数据在两端的来回时间，也就是响应时间）。<font color="green">//？</font>。</li>
+</ul>
+<h3 id="Java-Socket的工作机制"><a href="#Java-Socket的工作机制" class="headerlink" title="Java Socket的工作机制"></a>Java Socket的工作机制</h3><p>&emsp;&emsp;Socket这个概念没有具体对应的实体，它描述的是计算机之间完成相互通信的一种抽象功能。Socket有许多种实现方式，最常见的就是基于TCP/IP的流套接字，这是一种稳定的通信协议。典型的基于Socket的通信场景。</p>
+<p><img src="/2020/08/20/Notes-Book-Analysis-Javaweb-ChapterTwo/SocketCommunicationExample.png" alt="SocketCommunicationExample"></p>
+<p>&emsp;&emsp;如图所示，主机A的应用程序要能和主机B的应用程序通信，必须要通过Socket建立连接，而建立Socket连接必须由底层TCP/IP协议来建立TCP连接。建立TCP连接需要底层IP来寻址网络中的主机，用端口号来指定主机中不同的应用程序。以上，就可以通过Socket实例来指定代表唯一一个主机上的应用程序的通信链路了。</p>
+<h3 id="建立通信链路"><a href="#建立通信链路" class="headerlink" title="建立通信链路"></a>建立通信链路</h3><p>&emsp;&emsp;当客户端要与服务器端通信时，客户端首先要创建一个Socket实例，操作系统将为这个Socket实例分配一个没有被使用的本地端口号，并创建一个包含本地地址、远程地址和端口号的套接字数据结构，<font color="teal">这个数据结构将一直保存在系统中直到这个连接关闭。</font>在创建Socket实例的构造函数正确返回<font color="red">之前</font>（Socket依赖于TCP/IP协议），需要进行TCP的三次握手，TCP握手协议完成后，Socket实例对象将创建完成，否则将抛出IOException错误。</p>
+<p>&emsp;&emsp;与之对应的服务端将创建一个ServerSocket实例，创建ServerSocket比较简单，只要指定的端口号没有被占用，一般实例都会创建成功。同时操作系统也会为Servert实例创建一个底层数据结构，在这个数据结构中包含指定监听的端口号和包含监听地址的通配符，通常情况下都是”<font color="red">*</font>“，即监听所有地址。之后当调用<font color="teal">accept()</font>方法时，将进入阻塞状态，等待客户端的请求。当一个新的请求到来时，将为这个连接创建一个新的套接字数据结构，该套接字数据的信息包含的地址和端口信息正是请求源地址和端口。这个新创建的数据结构将会关联到ServerSocket实例的一个未完成的连接数据结构列表中。<font color="yellow">注意，这时服务器的与之对应的Socket并没有完成创建，而要等到与客户端的3次握手完成后，这个服务端的Socket实例才会返回，并将这个Socket实例对应的数据结构从未完成列表移到已完成列表中。</font>所有与ServerSocket所关联的<font color="teal">已完成</font>列表中每个数据结构都代表一个与客户端建立的TCP连接。</p>
+<h3 id="数据传输"><a href="#数据传输" class="headerlink" title="数据传输"></a>数据传输</h3><p>&emsp;&emsp;传输数据是建立连接的主要目的。</p>
+<p>&emsp;&emsp;当连接成功建立，服务端和客户端都会有一个Socket实例，<font color="teal">Socket实例都有一个InputStream和OutputStream，并通过这两个对象来交换数据。</font>由于网络I/O都是以字节流传输到，当创建Socket对象时，操作系统会为InputStream和OutputStream分别分配一定大小的缓存区，数据的写入和读取都是通过这个缓存区完成。写入端将数据写到OutputStream对应的SendQ中，<font color="teal">当队列填满时，数据将会被转移到另一端的InputStream对应的RecvQ队列中，如果RecvQ也满了，那么OutputStream队列将会阻塞，直到RecvQ队列的有足够的空间容纳SendQ发送的数据。</font><font color="red">特别注意: 缓存区的大小以及写入端的速度和读取端端速度非常影响这个连接的数据传输效率，由于可能会发生阻塞，所以网络I/O与磁盘I/O不同的是，数据的写入和读取还需要有一个协调的过程，如果两边同时传送数据可能会发生死锁问题。</font>&lt;?&gt;</p>
+<h2 id="NIO的工作方式"><a href="#NIO的工作方式" class="headerlink" title="NIO的工作方式"></a>NIO的工作方式</h2><h3 id="BIO带来的挑战"><a href="#BIO带来的挑战" class="headerlink" title="BIO带来的挑战"></a>BIO带来的挑战</h3><p>&emsp;&emsp;BIO即阻塞式IO，不管是磁盘I/O还是网络I/O，数据在写入OutputStream或者从InputStream读取时都有可能会阻塞，一旦有阻塞，线程将失去CPU的使用权，这在当前的大规模访问量和有性能要求的情况下，是不能接受的。虽然当前的网络I/O有一些解决办法，比如，每一个客户端对应一个处理线程，出现阻塞时只是一个线程阻塞而不会影响其他线程工作，还有为了减少系统线程的开销，采用<font color="teal">线程池</font>的办法来减少线程创建和回收的成本。但是，以上方法在某些场景下仍然有着无法解决的困难，如，当前一些需要大量HTTP长连接的情况，比如，Web旺旺，服务器端需要同时保持几百万的HTTP连接，但并不是每时每刻都在传输数据，在这种情况下不可能创建这么多线程来保持连接；另一种情况是，每个客户端的请求在服务端可能需要访问一些竞争资源，这些客户端在不同线程中，因此需要<font color="yellow">同步</font>，要实现这种同步操作比单线程复杂的多。因此，需要另一种I/O操作的方式。</p>
+<h3 id="NIO的工作机制"><a href="#NIO的工作机制" class="headerlink" title="NIO的工作机制"></a>NIO的工作机制</h3><p>&emsp;&emsp;NIO的相关类图，如下图所示。 </p>
+<p><img src="/2020/08/20/Notes-Book-Analysis-Javaweb-ChapterTwo/NIOClassDiagram.png" alt="NIOClassDiagram"></p>
+<p>&emsp;&emsp;在上图中，有两个关键类：<font color="teal">Channel</font>和<font color="red">Selector</font>，它们时NIO中的两个核心概念。用前面的交通工具继续比喻，则，Channel要比Socket更加具体，可以把它比作某个具体的交通工具，比如汽车和高铁，可把Selecor比作一个车站的车辆运行调度系统，它将负责监控每辆车的当前运行状态，是已经出站还是在路上，也就是说Selector可以轮询每个Channel的状态。还有一个<font color="yellow">Buffer</font>类，它也比Stream更加具体，可以比作车上的座位。Channel=汽车，Buffer=汽车上的座位，是具体的概念，Stream只能代表一个座位，具体是什么座位是不确定的，也就是说上车之前并不知道其具体信息，如是否有座位，是什么车的座位，这些信息已经封装在了Socket（运输工具）中。NIO引入Channel、Buffer和Selector，是把这些信息具体化，让程序员可以控制它们。例如，当我们调用write()往SendQ中写入数据时，当一次写的数据超过SendQ长度时需要按照SendQ的长度进行分割，在这个过程中需要将用户空间数据和内核地址空间进行切换，而这个切换不是程序员可以控制的，但在Buffer中，程序员可以控制Buffer的容量、是否扩容以及如何扩容等。</p>
+<p>&emsp;&emsp;下面是一段典型的NIO代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> selector <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">  ByteBuffer buffer = ByteBuffer.allocate(<span class="number">1024</span>);</span><br><span class="line">  Selector selector = Selector.open();</span><br><span class="line">  ServerSocketChannel ssc = ServerSocketChannel.open();</span><br><span class="line">  ssc.configureBlocking(<span class="keyword">false</span>); <span class="comment">// 设置为非阻塞式</span></span><br><span class="line">  ssc.socket().bind(<span class="keyword">new</span> InetSocketAddress(<span class="number">8080</span>));</span><br><span class="line">  ssc.register(selector, SelectionKey.OP_ACCEPT); <span class="comment">// 注册监听事件</span></span><br><span class="line">  <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">    Set selectedKeys = selector.selectedKeys(); <span class="comment">// 取得所有key集合</span></span><br><span class="line">    Iterator it = selectedKeys.iterator();</span><br><span class="line">    <span class="keyword">while</span> (it.hasNext()) &#123;</span><br><span class="line">      SelectionKey key = (SelectionKey) it.next();</span><br><span class="line">      <span class="keyword">if</span> ((key.readyOps() &amp; SelectionKey.OP_ACCEPT) == SelectionKey.OP_ACCEPT) &#123;</span><br><span class="line">        ServerSocketChannel ssChannel = (ServerSocketChannel) key.channel();</span><br><span class="line">        SocketChannel sc = ssChannel.accept(); <span class="comment">// 接受到服务器的请求</span></span><br><span class="line">        sc.configureBlocking(<span class="keyword">false</span>);</span><br><span class="line">        sc.register(selector, SelectionKey.OP_READ);</span><br><span class="line">        it.remove();</span><br><span class="line">      &#125;<span class="keyword">else</span> <span class="keyword">if</span> ((key.readIps() &amp; SelectionLey.OP_READ) == SelectionKey.OP_READ) &#123;</span><br><span class="line">        SocketChannel sc = (SockeyChannel) key.channel();</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">          buffer.clear();</span><br><span class="line">          <span class="keyword">int</span> n = sc.read(buffer); <span class="comment">// 读取数据</span></span><br><span class="line">          <span class="keyword">if</span> (n &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">          &#125;</span><br><span class="line">          buffer.flip();</span><br><span class="line">        &#125;</span><br><span class="line">        it.remove();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;NIOClassDiagram.png</span><br><span class="line">&#125;Pocessing of Socket requests base on NIO.png</span><br></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;上述代码：调用Selector的静态工厂创建一个选择器，创建一个服务端的Channel，绑定到一个Socket对象，并把这个通信信道注册到选择器上，把这个通信信道设置为非阻塞模式。然后就可以调用Selector的selectedKeys方法来检查已经注册在这个选择器上的所有通信信道是否有需要的事件发生，如果有某个事件发生，将会返回所有的SelectionKey，通过这个对象的Channel方法就可以取得这个通信信道对象，从而读取通信的数据，而这里读取的数据是<font color="red">Buffer</font>，这个Buffer是可以控制的缓冲器。</p>
+<p>&emsp;&emsp;在上面的这段程序中，将Server端监听连接请求的事件和处理请求的事件放在一个线程中，但是在事件应用中，通常会把它们放在两个线程中：<font color="teal">一个线程专门负责监听客户端的连接请求，以阻塞方式执行；</font><font color="red">一个专门负责处理请求，这个专门处理请求的线程会真正采用NIO的方式。</font>如Tomcat和Jetty都是使用这个处理方式。下图表示了基于NIO工作方式的Socket请求的处理过程。</p>
+<p><img src="/2020/08/20/Notes-Book-Analysis-Javaweb-ChapterTwo/PocessingOfSocketRequestsBase0OnNIO.png" alt="PocessingOfSocketRequestsBase0OnNIO"></p>
+<p>&emsp;&emsp;上图中的Selector可以同时监听一组通信信道（Channel）上的I/O状态，前提是这个Selector已经注册到这些通信信道中。选择器Selector可以调用select()方法检查已经注册的通信信道上I/O是否已经准备好，如果没有至少一个信道I/O有变化，那么select方法会阻塞等待或在超时时间后返回0。如果有多个信道有数据，那么会把这些数据分配到对应的数据Buffer中。<font color="teal">所以关键的地方是，有一个线程来处理所有连接的数据交互，每个连接的数据交互都不是阻塞方式，所以可以同时处理大量的连接请求。</font></p>
+<h3 id="Buffer的工作方式"><a href="#Buffer的工作方式" class="headerlink" title="Buffer的工作方式"></a>Buffer的工作方式</h3><p>&emsp;&emsp;Selector监测到通信信道I/O有数据传输时，通过select()取得SocketChannel，将数据读取或写入Buffer缓冲区。</p>
+<p>&emsp;&emsp;可以简单把Buffer理解为一组基本数据类型的元素列表，其通过几个变量来保存这个数据的当前位置状态，一般有4个索引，如下表所示。</p>
+<table>
+<thead>
+<tr>
+<th align="center">索引</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">capacity</td>
+<td align="center">缓冲区数组的总长度</td>
+</tr>
+<tr>
+<td align="center">position</td>
+<td align="center">下一个要操作的数据元素的位置</td>
+</tr>
+<tr>
+<td align="center">limit</td>
+<td align="center">缓冲区数组紫红不可操作的下一个元素的位置，limit&lt;=capacity</td>
+</tr>
+<tr>
+<td align="center">mark</td>
+<td align="center">用于记录当前position的前一个位置或者默认为0</td>
+</tr>
+</tbody></table>
+<p>&emsp;&emsp;在实际操作数据时，它们的关系如下图所示。</p>
+<p><img src="/2020/08/20/Notes-Book-Analysis-Javaweb-ChapterTwo/BufferIndexesRelationalGraph.png" alt="BufferIndexesRelationalGraph"></p>
+<p>&emsp;&emsp;通过ByteBuffer.allocate(11)这个方法可以创建一个11个byte长度的数组缓冲区，初始状态如上图所示，其position的位置为0，capacity和limit默认都是数组长度。当写入5个字节时，其位置变化如下图所示。</p>
+<p><img src="/2020/08/20/Notes-Book-Analysis-Javaweb-ChapterTwo/PositionChangeDiagram.png" alt="PositionChangeDiagram"></p>
+<p>&emsp;&emsp;这时，需要将缓冲区的5个字节数据写入Channel通信信道，所以要调用byteBuffer.flip()方法，数组的状态变化如下图所示。</p>
+<p><img src="/2020/08/20/Notes-Book-Analysis-Javaweb-ChapterTwo/StateChangeDiagram.png" alt="StateChangeDiagram"></p>
+<p>&emsp;&emsp;这时底层操作系统可以将缓冲区正确读取这5个字节数据并发送。在下一次写数据之前，调用clear()方法，缓冲区的索引将回到初始状态。</p>
+<p>&emsp;&emsp;当我们调用mark()方法时，它将记录当前position的前一个位置，当我们调用reset时，position将恢复mark记录下来的值。</p>
+<p>&emsp;&emsp;<font color="teal">还有一点特别注意，</font>通过Channel获取的I/O数据首先要经过操作系统的Socket缓冲区，再将数据复制到Buffer中，这个操作系统缓冲区就是底层的TCP所关联的RecvQ或者SendQ队列，从操作系统缓冲区到用户缓冲区比较消耗性能，Buffer提供了<font color="red">另一种直接操作操作系统缓冲区到方式</font>。即ByteBuffer,allocateDirector(size)，这个方法返回到DirectByteBuffer就是与底层存储空间关联的缓冲区，它通过Native代码操作非JVM堆的内存空间。每次创建或者释放的时候都会调用一次System.gc()。<font color="yellow">注意：</font>在使用DirectByteBuffer时可能会引起JVM内存泄漏问题。DirectByteBuffer和Non-Direct Buffer（HeapByteBuffer）的对比如下表所示。</p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">HeapByteBuffer</th>
+<th align="center">DirectByteBuffer</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">存储位置</td>
+<td align="center">Java Heap中</td>
+<td align="center">Native内存中</td>
+</tr>
+<tr>
+<td align="center">I/O</td>
+<td align="center">需要在用户地址空间和操作系统内核地址空间复制数据</td>
+<td align="center">不需复制</td>
+</tr>
+<tr>
+<td align="center">内存管理</td>
+<td align="center">Java GC回收，创建和回收开销少</td>
+<td align="center">通过调用System.gc()释放掉Java对象引用的DirectByteBuffer内存空间，如果Java对象长时间持用引用可能会导致Native内存泄漏，创建和回收内存开销较大</td>
+</tr>
+<tr>
+<td align="center">适用场景</td>
+<td align="center">并发连接数少于1000，I/O操作较少时比较适合</td>
+<td align="center">数据量比较大、声明周期比较长的情况下比较合适</td>
+</tr>
+</tbody></table>
+<h3 id="NIO的数据访问方式"><a href="#NIO的数据访问方式" class="headerlink" title="NIO的数据访问方式"></a>NIO的数据访问方式</h3><p>&emsp;&emsp;NIO提供了比传统的文件访问方式更好的方法，其有着两个优化方法：一个是FileChannel,transferTo、FileChannel.transferFrom；另一个是FileChannel.map。</p>
+<ul>
+<li>FileChannel.transferXXX</li>
+</ul>
+<p>&emsp;&emsp;FileChannel.transferXXX与传统的访问文件方式相比可以减少数据从内核到用户空间的复制，数据直接在内核空间中移动，在Linux中，其使用sendfile系统调用。以下是两种访问文件方式的对比图。</p>
+<p><img src="/2020/08/20/Notes-Book-Analysis-Javaweb-ChapterTwo/TraditionalDataAccess.png" alt="TraditionalDataAccess"></p>
+<p><img src="/2020/08/20/Notes-Book-Analysis-Javaweb-ChapterTwo/FileChannel.transferXXXDataAccess.png" alt="FileChannel.transferXXXDataAccess"></p>
+<ul>
+<li>FileChannel.map</li>
+</ul>
+<p>&emsp;&emsp;所谓的FileChannel,map方法就是将文件按照一定大小块映射为内存区域，当程序访问这个内存区域时，将直接操作这个数据文件，这种方式省去了数据从内核空间向用户空间复制的小号，其适合对大文件的只读性操作，如大文件的MD5校验。但是这种方式是和操作系统的底层I/O实现相关的。某一实现方式的简略代码如下所示。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">map</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">int</span> BUFFER_SIZE = <span class="number">1024</span>;</span><br><span class="line">  String filename = <span class="string">&quot;test.db&quot;</span>;</span><br><span class="line">  <span class="keyword">long</span> fileLength = <span class="keyword">new</span> File(filename).length();</span><br><span class="line">  <span class="keyword">int</span> bufferCount = <span class="number">1</span> + (<span class="keyword">int</span>) (fileLength / BUFFER_SIZE);</span><br><span class="line">  MappedByteBuffer[] buffers = <span class="keyword">new</span> MappedByteBuffer[bufferCount];</span><br><span class="line">  <span class="keyword">long</span> remaining = fileLength;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; bufferCount; i++) &#123;</span><br><span class="line">    RandomAccessFile file;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      file = <span class="keyword">new</span> RandomAccessFile(filename, <span class="string">&quot;r&quot;</span>);</span><br><span class="line">      buffers[i] = file.getChannel().map(FileChannel.MapMode.READ_ONLY, i * BUFFER_SIZE, (<span class="keyword">int</span>) Math.min(remaining, BUFFER_SIZE));</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">      e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">    remaining -= BUFFER_SIZE;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="I-O调优"><a href="#I-O调优" class="headerlink" title="I/O调优"></a>I/O调优</h2><h3 id="磁盘I-O调优"><a href="#磁盘I-O调优" class="headerlink" title="磁盘I/O调优"></a>磁盘I/O调优</h3><ol>
+<li>性能检测</li>
+</ol>
+<p>&emsp;&emsp;应用程序通常需要访问磁盘来读取数据，而磁盘I/O非常消耗时间，要判断I/O是否是当前系统的性能瓶颈，有一些常用的指标参数。</p>
+<p>&emsp;&emsp;可以压力测试应用程序，看系统的I/O指标是否正常，例如：测试机器有4个CPU，那么理想的<font color="teal">I/O wait</font>参数应该不超过25%。在Linux系统下可以通过iostat命令查看。</p>
+<p>&emsp;&emsp;还有另一个参数， <font color="skyblue">IOPS</font>，即要查看应用程序需要的最低的IOPS是多少，磁盘的IOPS是否能达到要求。每个磁盘的IOPS通常在一个范围内，这和存储在磁盘上的数据块大小和访问方式也有关，但主要是由磁盘的转速决定的，磁盘的转速越高，磁盘的IOPS越高（机械硬盘）。</p>
+<p>&emsp;&emsp;为了提高磁盘I/O的性能，可以采用RAID的技术，即磁盘阵列。</p>
+<p>&emsp;&emsp;磁盘的读写吞吐量参数也可以通过iostat命令来获取，可以通过以下公示计算RAID的理论IOPS值。<br>$$<br>(磁盘数 * 每块磁盘的IOPS值) / (磁盘读的吞吐量 + RAID因子 * 磁盘写的吞吐量) = IOPS<br>$$</p>
+<ol start="2">
+<li>提升I/O性能</li>
+</ol>
+<p>&emsp;&emsp;提升磁盘I/O性能的方法一般有：</p>
+<ul>
+<li>增加缓存，减少磁盘访问次数</li>
+<li>优化磁盘的管理系统，设计最优的磁盘方式策略，以及磁盘的寻址策略，这是在<font color="gold">底层操作系统</font>层面考虑的。</li>
+<li>设计合理的磁盘存储数据块，以及访问这些数据块的策略。这时在<font color="skyblue">应用层面</font>考虑的。</li>
+<li>应用合理的RAID策略提升磁盘I/O，RAID策略如下表所示。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">磁盘阵列</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">RAID 0</td>
+<td align="center">数据被平均写到多个磁盘阵列中，写数据和读数据都是并行的，所以理论上磁盘的IOPS可以提高一倍。</td>
+</tr>
+<tr>
+<td align="center">RAID 1</td>
+<td align="center">RAID 1的主要作用是能够提高数据的安全性，它将一份数据分别复制到多个磁盘阵列中，并不能提升IOPS，但是相同的数据有多个备份，通常用于对数据安全性较高的场合中。</td>
+</tr>
+<tr>
+<td align="center">RAID 5</td>
+<td align="center">这种设计方式是前两种的折中方式，它将数据平均写到所有磁盘阵列总数减一的磁盘中，往另外一个磁盘中写入这份数据的奇偶校验信息，如果其中一个磁盘损坏，可以通过其他磁盘的数据和这个数据的奇偶校验信息来恢复这份数据。</td>
+</tr>
+<tr>
+<td align="center">RAID 0 + 1</td>
+<td align="center">如名字一样，就是根据数据的备份情况进行分组，一份数据同时写到多个备份磁盘分组中，同时多个分组也会并行读写。</td>
+</tr>
+</tbody></table>
+<h3 id="TCP网络参数调优"><a href="#TCP网络参数调优" class="headerlink" title="TCP网络参数调优"></a>TCP网络参数调优</h3><p>&emsp;&emsp;要建立一个TCP连接，必须知道对方的IP和一个未被使用的端口，由于32位操作系统的端口号通常由两个字节表示，也就是只有2^16=65536个，所以一台主机能够同时建立连接数是有限的，还有一些端口<font color="red">0-1024</font>是受保护的，这些端口并不能被随意占用。</p>
+<p>&emsp;&emsp;在Linux系统中，可以通过查看<font color="gold">/proc/sys/net/ipv4/ip_local_port_range</font>文件来查看当前这个主机可以使用的端口范围。</p>
+<p>&emsp;&emsp;如果可以分配的端口号偏少，在遇到大量并发请求时，就会成为瓶颈，由于端口有限制导致大量请求等待建立连接。另外如果发现有大量的TIME_WAIT的话，可以设置<font color="lightblue">/proc/sys/net/ipv4/tcp_fin_timeout</font>为更小的值来进行快速释放请求。TCP调优参数如下表所示。</p>
+<table>
+<thead>
+<tr>
+<th align="center">网络参数</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">echo “1024 65535” &gt; /proc/sys/net/ipv4/ip_local_port_range</td>
+<td align="center">设置向外连接可用的端口范围</td>
+</tr>
+<tr>
+<td align="center">echo 1 &gt; /proc/sys/net/ipv4/tcp_tw_reuse</td>
+<td align="center">设置time_wait连接重用</td>
+</tr>
+<tr>
+<td align="center">echo 1 &gt; /proc/sys/net/ipv4/tcp_tw_recycle</td>
+<td align="center">设置快速回收time_wait连接</td>
+</tr>
+<tr>
+<td align="center">echo 180000 &gt; /proc/sys/net/ipv4/tcp_max_tw_buckets</td>
+<td align="center">设置最大time_wait连接长度</td>
+</tr>
+<tr>
+<td align="center">echo 0 &gt; /proc/sys/net/ipv4/tcp_timestamps</td>
+<td align="center">表示是否启用以一种比超时重发更精确的方法来启用对RIT的计算</td>
+</tr>
+<tr>
+<td align="center">echo 1 &gt; /proc/sys/net/ipv4/tcp_window_scaling</td>
+<td align="center">设置TCP/IP的会话的滑动窗口大小是否可变</td>
+</tr>
+<tr>
+<td align="center">echo 20000 &gt; /proc/sys/net/ipv4/tcp_max_syn_backlog</td>
+<td align="center">设置最大等待处于客户端还没有应答回来的连接数</td>
+</tr>
+<tr>
+<td align="center">echo 10000 &gt; /proc/sys/net/core/somaxconn</td>
+<td align="center">设置每一个处于监听状态的端口的监听队列的长度</td>
+</tr>
+<tr>
+<td align="center">echo 10000 &gt; /proc/sys/net/core/netdev_max_backlog</td>
+<td align="center">设置最大等待CPU处理的包的数量</td>
+</tr>
+<tr>
+<td align="center">echo 2000000 &gt; /proc/sys/net/core/file_max</td>
+<td align="center">设置最大打开文件数</td>
+</tr>
+<tr>
+<td align="center">echo 15 &gt; /proc/sys/net/ipv4/tcp_fin_timeout</td>
+<td align="center">设置FIN-WAIT-2状态等待回收时间</td>
+</tr>
+<tr>
+<td align="center">echo 16777216 &gt; /proc/sys/net/core/rmem_max</td>
+<td align="center">设置最大的系统套接字数据接收缓冲大小</td>
+</tr>
+<tr>
+<td align="center">echo 262144 &gt; /proc/sys/net/core/rmem_default</td>
+<td align="center">设置默认的系统套接字数据接收缓冲大小</td>
+</tr>
+<tr>
+<td align="center">echo 16777216 &gt; /proc/sys/net/core/wmem_max</td>
+<td align="center">设置最大的系统套接字数据发送缓冲大小</td>
+</tr>
+<tr>
+<td align="center">echo 262144 &gt; /proc/sys/net/core/wmem_default</td>
+<td align="center">设置默认的系统套接字数据发送缓冲大小</td>
+</tr>
+<tr>
+<td align="center">echo “4096 87380 16777216” &gt; /proc/sys/net/ipv4/tcp_rmem</td>
+<td align="center">设置最大的TCP数据接收缓冲大小，三个值分别是最小、默认和最大值</td>
+</tr>
+<tr>
+<td align="center">echo “4096 87380 16777216” &gt; /proc/sys/net/ipv4/tcp_wmem</td>
+<td align="center">设置最大的TCP数据发送缓冲大小，三个值分别是最小、默认和最大值</td>
+</tr>
+</tbody></table>
+<p>&emsp;&emsp;<font color="gold">注意，</font>以上设置是临时性的，重启系统之后会自动复原。另外，linux提供了一些工具可用于查看当前的TCP统计信息。如下所示。</p>
+<ul>
+<li>cat /proc/net/netstat : 查看TCP的统计信息</li>
+<li>cat /proc/net/snmp : 查看当前系统的连接情况</li>
+<li>netstat -s : 查看网络的统计信息</li>
+</ul>
+<h3 id="网络I-O优化"><a href="#网络I-O优化" class="headerlink" title="网络I/O优化"></a>网络I/O优化</h3><p>&emsp;&emsp;网络I/O通常有如下一些基本处理原则。</p>
+<ul>
+<li><font color="teal">减少网络交互的次数</font></li>
+<li><font color="red">减少网络传输数据量大小</font></li>
+<li><font colo="gold">尽量减少编码</font></li>
+<li><font color="skyblue">根据应用场景设置设计合适的交互方式</font><ul>
+<li>同步和异步<ul>
+<li>所谓同步就是一个任务的完成需要依赖另一个任务时，只有等待被依赖的任务完成时，依赖的任务才能完成；而异步不需要等待被依赖的任务完成，只是通知被依赖的任务要完成什么工作，依赖的任务也立即执行，只要自己完成了整个任务就算完成了。</li>
+</ul>
+</li>
+<li>阻塞和非阻塞<ul>
+<li>阻塞和非阻塞主要是从CPU的消耗上来说的，阻塞就是CPU停下来等待另一个慢的操作完成之后，CPU才接着完成其他的工作。非阻塞就是在这个慢的操作执行时，CPU去做其他工作，等这个慢的操作完成时，CPU再接着完成后续的操作。<font color="red">注意，非阻塞可能会带来系统的线程切换增加</font>。</li>
+</ul>
+</li>
+<li>两种方式的组合<ul>
+<li>组合的方式有4种，分别是同步阻塞、同步非阻塞、异步阻塞、异步非阻塞。如下表所示。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">组合方式</th>
+<th align="center">性能分析</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">同步阻塞</td>
+<td align="center">最常用的一种用法，使用也是最简单的，但是I/O性能一般很差。CPU大部分时间都处于空闲状态</td>
+</tr>
+<tr>
+<td align="center">同步非阻塞</td>
+<td align="center">提升I/O性能的常用手段，就是将I/O的阻塞改成非阻塞方式，尤其在网络是长连接同时传输数据也不是很多的情况下，提升性能非常有效。这种方式通常能提升I/O性能，但是会消耗CPU，在使用时要考虑增加的I/O性能是否能补偿CPU的消耗，也就是系统的瓶颈时在I/O上还是CPU上</td>
+</tr>
+<tr>
+<td align="center">异步阻塞</td>
+<td align="center">这种方式在分布式数据库中经常用到，异步阻塞能对网络I/O提升效率尤其是分布式数据库中同时写多份相同诗句的情况</td>
+</tr>
+<tr>
+<td align="center">异步非阻塞</td>
+<td align="center">这种组合的方式使用起来非常复杂，只有在一些非常复杂的分布式情况下会采用。其适用于，同时要传多份相同的数据到集群中的不同的机器，同时数据量不大却非常频繁的情况，这种网络I/O用这种方式性能达到最高。</td>
+</tr>
+</tbody></table>
+<p>&emsp;&emsp;虽然异步和非阻塞能够提高I/O的性能，但是也会带来一些额外的性能成本。例如，会增加线程数量从而增加CPU的消耗，同时也会导致程序设计复杂度的上升。</p>
+<h2 id="设计模式解析之适配器模式"><a href="#设计模式解析之适配器模式" class="headerlink" title="设计模式解析之适配器模式"></a>设计模式解析之适配器模式</h2><p>&emsp;&emsp;对适配器模式的功能很好理解，就是把一个类的接口变换为客户端所能接受的另一种接口，从而使两个接口不匹配的而无法在一起工作的两个类能够在一起工作。</p>
+<p>&emsp;&emsp;通常被用在一个项目需要引用一些开源框架来一起工作的情况下，这些框架的内部通常都有一些关于环境信息的接口，需要从外部传入，但是外部的接口不一定能匹配，这种情况下，就需要用到<font color="skyblue">适配器模式</font>。</p>
+<h3 id="适配器模式的结构"><a href="#适配器模式的结构" class="headerlink" title="适配器模式的结构"></a>适配器模式的结构</h3><p>&emsp;&emsp;适配器模式的类结构如下图所示。</p>
+<p><img src="/2020/08/20/Notes-Book-Analysis-Javaweb-ChapterTwo/ClassStructureofAdapterPattern.png" alt="ClassStructureofAdapterPattern"></p>
+<p>&emsp;&emsp;上图各角色说明如下。</p>
+<ul>
+<li>Target（目标接口）：所要转换的所期待的接口</li>
+<li>Adaptee（源角色）：需要适配的接口</li>
+<li>Adapter（适配器）：将源接口适配成目标接口，继承源接口，实现目标接口</li>
+</ul>
+<h3 id="Java-I-O中的适配器模式"><a href="#Java-I-O中的适配器模式" class="headerlink" title="Java I/O中的适配器模式"></a>Java I/O中的适配器模式</h3><p>&emsp;&emsp;适配器的作用就是将一个接口适配到另一个接口，在Java的I/O类库中有很多这样的需要，例如将字符串数据转变成字节数据保存到文件中，将字节数据转变成数据流等。下面以InputStreamReader和OutputStreamWriter类为例介绍适配器模式。</p>
+<p>&emsp;&emsp;InputstreamReader和OutputStreamWriter类分别继承了Reader和Writer接口，但是要创建它们的对象必须在构造函数中传入一个InputStream和OutputStream的实例。InputstreamReader和OutputstreamWriter的作用也就是将InputStream和OutputStream适配到Reader和Writer。InputStreamReader的类结构如下图所示。</p>
+<p><img src="/2020/08/20/Notes-Book-Analysis-Javaweb-ChapterTwo/InputStreamReaderClassDiagram.png" alt="InputStreamReaderClassDiagram"></p>
+<p>&emsp;&emsp;InputStreamReader实现了Reader接口，并且持有了InputStream的引用，这里是通过StreamDecoder类间接持有的，因为从byte到char要经过编码。</p>
+<p>&emsp;&emsp;很显然，适配器就是InputStreamReader类，源角色就是InputStream代表的实例对象，目标接口就是Reader类。OutputStreamWriter也是类似的方式。</p>
+<p>&emsp;&emsp;在I/O类库中还有很多类似的用法，如StringReader将一个String类适配到Reader接口，ByteArrayInputStream适配器将byte数组适配到InputStream流处理接口。</p>
+<h2 id="设计模式解析之装饰器模式"><a href="#设计模式解析之装饰器模式" class="headerlink" title="设计模式解析之装饰器模式"></a>设计模式解析之装饰器模式</h2><p>&emsp;&emsp;装饰器模式，顾名思义，就是将某个类重新装扮一下，使得它比原来更“漂亮”，或者在功能上更强大，这就是装饰器模式所要达到的目的。但是作为原来的这个类的使用者还不应该感受到装饰前与装饰后有什么不同，否则就破坏了原有类的结构类，所以装饰器模式要做到对被装饰类的使用者透明，这是对装饰器模式的一个要求。</p>
+<h3 id="装饰器模式的结构"><a href="#装饰器模式的结构" class="headerlink" title="装饰器模式的结构"></a>装饰器模式的结构</h3><p>&emsp;&emsp;下图是典型的装饰模式的类结构图。</p>
+<p><img src="/2020/08/20/Notes-Book-Analysis-Javaweb-ChapterTwo/ClassStructureofDecoratorPattern.png" alt="ClassStructureofDecoratorPattern"></p>
+<p>&emsp;&emsp;上图中各个角色的描述如下。</p>
+<ul>
+<li>Component：抽象组件角色，定义一组抽象的接口，规定这个被装饰组件都有哪些功能。</li>
+<li>ConcreteComponent：实现这个抽象组件的所有功能。</li>
+<li>Decorator：装饰器角色，它持有一个Component对象实例的引用，定义一个与抽象组件一致的接口。</li>
+<li>ConcreteDecorator：具体的装饰器实现者，负责实现装饰器角色定义的功能。</li>
+</ul>
+<h3 id="Java-I-O的装饰器模式"><a href="#Java-I-O的装饰器模式" class="headerlink" title="Java I/O的装饰器模式"></a>Java I/O的装饰器模式</h3><p>&emsp;&emsp;前面介绍了装饰器模式的作用就是赋予被装饰的类更多的功能，在Java I/O类库中有很多不同的功能组合情况。这些不同的功能组合都是装饰器模式实现的，下面以FilterInputStream为例介绍装饰器模式的作用。</p>
+<p>&emsp;&emsp;下图是FilterInputStream的类结构图。</p>
+<p><img src="/2020/08/20/Notes-Book-Analysis-Javaweb-ChapterTwo/FilterInputStreamClassDiagram.png" alt="FilterInputStreamClassDiagram"></p>
+<p>&emsp;&emsp;上图中，InputStream类就是以抽象组件存在的；而FileInputStream就是具体组件，它实现了抽象组件的所有接口；FIlterInputStream类就是装饰角色，它实现了InputStream类的所有接口，并且持有InputStream类的对象实例的引用；BuffereredInputStream是具体的装饰器实现者，它给InputStream类附加类功能，这个装饰器类的作用就是使得InputStream读取的数据保存在内存中，从而提高读取的性能，与这个装饰器有类似功能的还有LineNumberInputStream类，它的作用就是提高按行读取数据的功能和性能，它们都使InputStream类增强类功能，或者提升了性能。</p>
+<h2 id="适配器模式与装饰器模式的区别"><a href="#适配器模式与装饰器模式的区别" class="headerlink" title="适配器模式与装饰器模式的区别"></a>适配器模式与装饰器模式的区别</h2><p>&emsp;&emsp;适配器与装饰器模式都有一个别名就是包装模式（Wrapper），它们看似都是起到包装一个类或对象的作用，但是使用它们的目的很不一样。<font color="gold">适配器模式的意义是将一个接口转变成另一个接口，</font>它的目的是通过改变接口来达到重复使用的目的；<font color="skyblue">而装饰器模式不是要改变被装饰对象的接口，而是恰恰要保留原有的接口，</font>但是增强原有对象的功能，或者改变原有对象的处理方法而提升性能，<font color="teal">所以这两个模式设计的目的是不同的。</font></p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><ul>
+<li>Java的I/O类库的基本架构</li>
+<li>磁盘I/O工作机制</li>
+<li>网络I/O工作机制</li>
+<li>NIO的工作方式</li>
+<li>I/O调优</li>
+<li>设计模式之适配器模式</li>
+<li>设计模式之装饰器模式</li>
+<li>适配器模式与装饰器模式之间的区别</li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li>《深入分析Java Web技术内幕》，许令波.</li>
+</ul>
+]]></content>
+      <categories>
+        <category>深入分析JavaWeb技术内幕读书笔记</category>
+      </categories>
+      <tags>
+        <tag>笔记</tag>
+        <tag>书籍</tag>
+        <tag>读书笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello-World</title>
+    <url>/2020/08/10/hello-world/</url>
+    <content><![CDATA[<p><img src="/2020/08/10/hello-world/bulb.gif" alt="bulb"></p>
+]]></content>
+      <categories>
+        <category>unCategories</category>
+      </categories>
+      <tags>
+        <tag>helloworld</tag>
+        <tag>test</tag>
+      </tags>
+  </entry>
+</search>

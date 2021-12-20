@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"normal"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="This is my personal blog!">
+<meta property="og:type" content="website">
+<meta property="og:title" content="ZWM&#39;s Blog">
+<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:site_name" content="ZWM&#39;s Blog">
+<meta property="og:description" content="This is my personal blog!">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="Zhang Weiming">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : true,
+    isPost : false,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>ZWM's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="ZWM's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ZWM's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Record and Thinking</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content index posts-expand">
+            
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/09/20/JavaEntityClassPackageName/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/pikachu.gif">
+      <meta itemprop="name" content="Zhang Weiming">
+      <meta itemprop="description" content="This is my personal blog!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZWM's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/09/20/JavaEntityClassPackageName/" class="post-title-link" itemprop="url">Java实体类包名问题</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-09-20 22:05:59" itemprop="dateCreated datePublished" datetime="2020-09-20T22:05:59+08:00">2020-09-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-05-04 22:11:40" itemprop="dateModified" datetime="2021-05-04T22:11:40+08:00">2021-05-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java%E5%AE%9E%E9%99%85%E5%BC%80%E5%8F%91%E9%97%AE%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">Java实际开发问题</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Java实体类包名问题"><a href="#Java实体类包名问题" class="headerlink" title="Java实体类包名问题"></a>Java实体类包名问题</h1><hr>
+<h2 id="Entity"><a href="#Entity" class="headerlink" title="Entity"></a>Entity</h2><p>&emsp;&emsp;最常用实体类，基本和数据表一一对应，一个实体一张表。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/09/20/JavaEntityClassPackageName/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/09/19/Notes-Book-Analysis-Javaweb-ChapterThree/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/pikachu.gif">
+      <meta itemprop="name" content="Zhang Weiming">
+      <meta itemprop="description" content="This is my personal blog!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZWM's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/09/19/Notes-Book-Analysis-Javaweb-ChapterThree/" class="post-title-link" itemprop="url">读书笔记-深入分析Java Web技术内幕-第三章</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-09-19 21:14:45" itemprop="dateCreated datePublished" datetime="2020-09-19T21:14:45+08:00">2020-09-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-05-04 22:11:40" itemprop="dateModified" datetime="2021-05-04T22:11:40+08:00">2021-05-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%85%A5%E5%88%86%E6%9E%90JavaWeb%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">深入分析JavaWeb技术内幕读书笔记</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="第三章-深入分析Java-Web中的中文编码问题"><a href="#第三章-深入分析Java-Web中的中文编码问题" class="headerlink" title="第三章    深入分析Java Web中的中文编码问题"></a>第三章    深入分析Java Web中的中文编码问题</h1><hr>
+<p>&emsp;&emsp;编码问题在Java中更加明显，因为Java是跨平台语言，在不同平台的编码之间切换较多。</p>
+<h2 id="几种常见的编码形式"><a href="#几种常见的编码形式" class="headerlink" title="几种常见的编码形式"></a>几种常见的编码形式</h2><h3 id="为什么要编码"><a href="#为什么要编码" class="headerlink" title="为什么要编码"></a>为什么要编码</h3><ul>
+<li>在计算机中存储信息的最小单位是1个字节，即8个bit，所以能表示的字符范围为0—255个。</li>
+<li>人类要表示的符号太多，无法用一个字节表示。</li>
+</ul>
+<h3 id="如何“翻译”"><a href="#如何“翻译”" class="headerlink" title="如何“翻译”"></a>如何“翻译”</h3><p>&emsp;&emsp;在计算机中提供了多种翻译<font color="teal">（编码）</font>方式，如：</p>
+<ul>
+<li>ASCII码<ul>
+<li>共有128个，用一个字节的低7位表示，0-31是控制字符，如换行，回车，删除。32-126是打印字符。可以通过键盘输入并且能够显示出来。</li>
+</ul>
+</li>
+<li>ISO-8859-1<ul>
+<li>128个字符是不够用的，于是ISO组织在ACSII码基础上制定了一系列标准来拓展ASCII编码。<ul>
+<li>ISO-8859-1，涵盖了大多数西欧语言字符，应用广泛。其仍然是单字节编码，共能表示256个字符。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>GB2312<ul>
+<li>全称是《信息技术 中文编码字符集》，是双字节编码，总的编码范围是A1-F7，其中A1-A9是符号区，总共包含682个字符；B0-F7是汉字区，包含6763个汉字。</li>
+</ul>
+</li>
+<li>GBK<ul>
+<li>全称是《汉字内码扩展规范》，是国家技术监督局为Windows 95制定的新的汉字内码规范，它的出现是为了拓展GB2312，并加入更多的汉字。</li>
+</ul>
+</li>
+<li>GB18030<ul>
+<li>全称是《信息技术 中文编码字符集》，是我国的强制标准，它可能是单字节、双字节或者是四字节编码。其与GB2312编码兼容，但其在实际应用系统中使用的并不广泛。</li>
+</ul>
+</li>
+<li>UTF-16<ul>
+<li>ISO试图创建一个全新的超语言字典。Unicode是Java和XML的基础。其用两个字节来表示Unicode的转化格式。两个字节是16bit，这也是UTF-16名字的由来。</li>
+</ul>
+</li>
+<li>UTF-8<ul>
+<li>UTF-16统一采用两个字节来表示一个字符，这导致很大一部分用一个字节可以表示的字符现在要用两个来表示。所以UTF-8采用了一种变长技术，每个编码区域有不同的字码长度。<font color="gold">不同的字符可以由1-6个字节组成。</font></li>
+<li>UTF-8有一下编码规则<ul>
+<li>如果是1个字节，最高位（第8位）为0，则表示着是1个ASCII字符（00-7F）。<font color="teal">这也说明所有ASCII编码已经是UTF-8了</font>。</li>
+<li>如果是一个字节，以11开头，则连续的1的个数暗示这个字符的字节数，如：110xxxxx代表它是双字节UTF-8字符的首字节。</li>
+<li>如果是一个字节，以10开头，表示它不是首字节，则需要向前查找才能得到当前字符的首字节。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="在Java中需要编码的场景"><a href="#在Java中需要编码的场景" class="headerlink" title="在Java中需要编码的场景"></a>在Java中需要编码的场景</h2><h3 id="在I-O操作中存在的编码"><a href="#在I-O操作中存在的编码" class="headerlink" title="在I/O操作中存在的编码"></a>在I/O操作中存在的编码</h3><p>&emsp;&emsp;涉及编码的地方一般都在从字符到字节或者从字节到字符上，而需要这种转换的场景主要是I/O，包括磁盘I/O和网络I/O。下图是Java中处理I/O问题的接口。</p>
+<p><img src="/2020/09/19/Notes-Book-Analysis-Javaweb-ChapterThree/InterfaceHandlesIOProblem-1.png" alt="InterfaceHandlesIOProblem-1"></p>
+<p>&emsp;&emsp;Reader类是在Java的I/O中读字符的父类，而InputStream类是读字节的父类。<font color="teal">InputStreamReader类</font>就是关联字节到字符的桥梁，它负责在I/O过程中处理读取字节到字符的转换，而对具体字节到字符的解码实现，它有委托<font color="red">StreamDecoder</font>去做，在StreamDecoder解码过程中，必须由用户指定Charset编码格式。值得注意的是，如果没有指定Charset，则将使用本地环境中的默认字符集，如在中文环境中将使用GBK编码。</p>
+<p>&emsp;&emsp;写的情况和读类似，字符的父类是Writer，字节的父类是OutputStream，通过<font color="skyblue">OutputStreamWriter</font>转换字符到字节，如下图所示。</p>
+<p><img src="/2020/09/19/Notes-Book-Analysis-Javaweb-ChapterThree/InterfaceHandlesIOProblem-2.png" alt="InterfaceHandlesIOProblem-2"></p>
+<p>&emsp;&emsp;同样，StreamEncoder类负责将字符编码成字节，编码格式和默认编码规则与解码是一致的。下面是一段实现了文件读写功能的代码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">String file = <span class="string">&quot;c:/stream.txt&quot;</span>;</span><br><span class="line">String charset = <span class="string">&quot;UTF-8&quot;</span>;</span><br><span class="line"><span class="comment">// 写字符转换成字节流</span></span><br><span class="line">FileOutputStream outputStream = <span class="keyword">new</span> FIleOutputStream(file);</span><br><span class="line">OutputStreamWriter writer = <span class="keyword">new</span> OutputStreamWriter(outputStream, charset);</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">  writer.write(<span class="string">&quot;这是要保存的中文字符&quot;</span>);</span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">  writer.close();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 读取字节转换为字符</span></span><br><span class="line">FileInputStream inputStream = <span class="keyword">new</span> FileInputStream(file);</span><br><span class="line">InputStreamReader reader = <span class="keyword">new</span> InputStreamReader(inputStream, charset);</span><br><span class="line">StringBuffer buffer = <span class="keyword">new</span> StringBuffer();</span><br><span class="line"><span class="keyword">char</span>[] buf = <span class="keyword">new</span> <span class="keyword">char</span>[<span class="number">64</span>];</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">  <span class="keyword">while</span> ((count = reader.read(buf)) != -<span class="number">1</span>) &#123;</span><br><span class="line">    buffer.append(buffer, <span class="number">0</span>, count);</span><br><span class="line">  &#125;</span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">  reader.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;一般在应用程序中，涉及I/O操作时要注意指定<font color="red">相同</font>的Charset字符集。</p>
+<h3 id="在内存操作中的编码"><a href="#在内存操作中的编码" class="headerlink" title="在内存操作中的编码"></a>在内存操作中的编码</h3><p>&emsp;&emsp;在Java开发中除了I/O操作设计编码外，最常见的是在内存中进行从字符到字节的数据类型转换，在Java中用String表示字符串，所以String类提供了转换到字节的方法，也支持将字节转换为字符串的构造函数，代码如下。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String s = <span class="string">&quot;这是一段中文字符串&quot;</span>;</span><br><span class="line"><span class="keyword">byte</span>[] b = s.getBytes(<span class="string">&quot;UTF-8&quot;</span>);</span><br><span class="line">String n = <span class="keyword">new</span> String(b, <span class="string">&quot;UTF-8&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;同时，Charset类也提供encode与decode方法，分别对应char[]到byte[]的编码和byte[]到char[]的解码。其代码如下。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Charset charset = Charset.forName(<span class="string">&quot;UTF-8&quot;</span>);</span><br><span class="line">ByteBuffer byteBuffer = charset.encode(string);</span><br><span class="line">CharBuffer charBuffer = charset.decode(byteBuffer);</span><br></pre></td></tr></table></figure>
+
+<p>&emsp;&emsp;如上述代码所示，编码和解码都在一个类中完成，通过forName设置编解码字符集，这样更容易实现统一编码格式。</p>
+<p>&emsp;&emsp;在Java中还有一个ByteBuffer类，它提供了一种char和byte之间的软转换，它们之间不需要编码和解码，只是把一个16bit的char拆为2个8bit的byte表示，它们的实际值并没有改变，仅仅是数据的类型做了转换，代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ByteBuffer heapByteBuffer = ByteBuffer.allocate(<span class="number">1024</span>);</span><br><span class="line">ByteBuffer byteBuffer = heapByteBuffer.putChar(c);</span><br></pre></td></tr></table></figure>
+
+<h2 id="在Java中如何编码"><a href="#在Java中如何编码" class="headerlink" title="在Java中如何编码"></a>在Java中如何编码</h2><p>&emsp;&emsp;这里将用实际例子介绍Java中如何实现编码和解码，以”I am 君山”这个字符穿为例子。代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">encode</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  String name = <span class="string">&quot;I am 君山&quot;</span>;</span><br><span class="line">  toHex(name.toCharArray());</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">byte</span>[] iso8859 = name.getBytes(<span class="string">&quot;ISO-8859-1&quot;</span>);</span><br><span class="line">    toHex(iso8859);</span><br><span class="line">    <span class="keyword">byte</span>[] gb2312 = name.getBytes(<span class="string">&quot;GB2312&quot;</span>);</span><br><span class="line">    toHex(gb2312);</span><br><span class="line">    <span class="keyword">byte</span>[] gbk = name.getBytes(<span class="string">&quot;GBK&quot;</span>);</span><br><span class="line">    toHex(gbk);</span><br><span class="line">    <span class="keyword">byte</span>[] utf16 = name.getBytes(<span class="string">&quot;UTF-16&quot;</span>);</span><br><span class="line">    toHex(utf16);</span><br><span class="line">    <span class="keyword">byte</span>[] utf8 = name.getBytes(<span class="string">&quot;UTF-8&quot;</span>);</span><br><span class="line">    toHex(utf8);</span><br><span class="line">  &#125; <span class="keyword">catch</span> (UnsupportedEncodingException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/20/Notes-Book-Analysis-Javaweb-ChapterTwo/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/pikachu.gif">
+      <meta itemprop="name" content="Zhang Weiming">
+      <meta itemprop="description" content="This is my personal blog!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZWM's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/08/20/Notes-Book-Analysis-Javaweb-ChapterTwo/" class="post-title-link" itemprop="url">读书笔记-深入分析Java Web技术内幕-第二章</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-08-20 01:12:47" itemprop="dateCreated datePublished" datetime="2020-08-20T01:12:47+08:00">2020-08-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-05-04 22:11:40" itemprop="dateModified" datetime="2021-05-04T22:11:40+08:00">2021-05-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%85%A5%E5%88%86%E6%9E%90JavaWeb%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">深入分析JavaWeb技术内幕读书笔记</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>19k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>18 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="第二章-深入分析Java-I-O的工作机制"><a href="#第二章-深入分析Java-I-O的工作机制" class="headerlink" title="第二章    深入分析Java I/O的工作机制"></a>第二章    深入分析Java I/O的工作机制</h1><hr>
+<p>&emsp;&emsp;I/O问题是当今Web应用中所面临的主要问题。</p>
+<h2 id="Java的I-O类库的基本架构"><a href="#Java的I-O类库的基本架构" class="headerlink" title="Java的I/O类库的基本架构"></a>Java的I/O类库的基本架构</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/08/20/Notes-Book-Analysis-Javaweb-ChapterTwo/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/17/Notes-Book-Analysis-Javaweb-ChapterOne/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/pikachu.gif">
+      <meta itemprop="name" content="Zhang Weiming">
+      <meta itemprop="description" content="This is my personal blog!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZWM's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/08/17/Notes-Book-Analysis-Javaweb-ChapterOne/" class="post-title-link" itemprop="url">读书笔记-深入分析Java Web技术内幕-第一章</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-08-17 00:09:04" itemprop="dateCreated datePublished" datetime="2020-08-17T00:09:04+08:00">2020-08-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-05-04 22:11:40" itemprop="dateModified" datetime="2021-05-04T22:11:40+08:00">2021-05-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%85%A5%E5%88%86%E6%9E%90JavaWeb%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">深入分析JavaWeb技术内幕读书笔记</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="第一章-深入Web请求过程"><a href="#第一章-深入Web请求过程" class="headerlink" title="第一章    深入Web请求过程"></a>第一章    深入Web请求过程</h1><hr>
+<h2 id="B-S架构的好处"><a href="#B-S架构的好处" class="headerlink" title="B/S架构的好处"></a>B/S架构的好处</h2><ul>
+<li>客户端使用统一的浏览器（Browser）</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/08/17/Notes-Book-Analysis-Javaweb-ChapterOne/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/10/hello-world/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/pikachu.gif">
+      <meta itemprop="name" content="Zhang Weiming">
+      <meta itemprop="description" content="This is my personal blog!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZWM's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/08/10/hello-world/" class="post-title-link" itemprop="url">Hello-World</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-08-10 01:23:17" itemprop="dateCreated datePublished" datetime="2020-08-10T01:23:17+08:00">2020-08-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-05-04 22:11:40" itemprop="dateModified" datetime="2021-05-04T22:11:40+08:00">2021-05-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/unCategories/" itemprop="url" rel="index"><span itemprop="name">unCategories</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>0</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="/2020/08/10/hello-world/bulb.gif" alt="bulb"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zhang Weiming"
+      src="/images/pikachu.gif">
+  <p class="site-author-name" itemprop="name">Zhang Weiming</p>
+  <div class="site-description" itemprop="description">This is my personal blog!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zwmwind" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zwmwind" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zhangweiming1995@qq.com" title="E-Mail → mailto:zhangweiming1995@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+    <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 
+    src="//music.163.com/outchain/player?type=2&id=402070513&auto=0&height=66"></iframe>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zhang Weiming</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">31k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">28 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
